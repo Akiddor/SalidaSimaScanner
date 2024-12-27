@@ -32,6 +32,7 @@ $numDays = mysqli_num_rows($dateResult);
     <nav>
         <a href="add_modelo.php">Agregar Numero de parte</a>
         <a href="add_componentes.php">Agregar Componente</a>
+        <a href="/Plan_trabajo/add_plan_trabajo.php">Plan de trabajo</a>
         <a href="historial.php" class="history-icon"><i class="fas fa-history"></i> Historial</a>
     </nav>
 </header>

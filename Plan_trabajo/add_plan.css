@@ -1,0 +1,324 @@
+:root {
+    --primary-color: #39649a;
+    --secondary-color: #333;
+    --background-color: #f4f4f4;
+    --text-color: #34495e;
+    --border-radius: 16px;
+    --transition: 0.3s ease;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Reset y estilos base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding-top: 70px;
+    min-height: 100vh;
+}
+
+/* Header */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--secondary-color);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+
+header a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: var(--transition);
+}
+
+header a:hover {
+    color: var(--primary-color);
+}
+
+/* Contenedores */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+/* Tipografía */
+h1, h2 {
+    color: var(--secondary-color);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    margin-top: 20px;
+}
+
+/* Formularios */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+    position: relative;
+}
+
+label {
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+button:hover {
+    background-color: #bdd2af;
+}
+
+/* Botón para agregar NIFCO */
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.add-nifco-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.add-nifco-btn:hover {
+    background-color: #c3b49e;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .custom-th {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+  }
+  
+  .custom-td {
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .custom-td:last-child {
+    text-align: center;
+  }
+  
+  .btn-edit,
+  .btn-delete {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-edit {
+    background-color: var(--primary-color);
+    color: #fff;
+  }
+  
+  .btn-edit:hover {
+    background-color: #c3b49e;
+  }
+  
+  .btn-delete {
+    background-color: #ff4d4d;
+    color: #fff;
+  }
+  
+  .btn-delete:hover {
+    background-color: #e60000;
+  }
+  
+/* Notificaciones */
+.notification {
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.notification.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.notification.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Acordeón */
+.accordion {
+    width: 100%;
+}
+
+.accordion-item {
+    margin-bottom: 1rem;
+}
+
+.accordion-button {
+    width: 100%;
+    padding: 1rem;
+    text-align: left;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.accordion-button:hover,
+.accordion-button.active {
+    background-color: #c3b49e;
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition);
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    padding: 0 1rem;
+}
+
+/* Entradas NIFCO */
+.nifco-entry {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    background-color: #fff;
+    box-shadow: var(--box-shadow);
+    max-width: 400px;
+    position: relative;
+}
+
+.nifco-entry label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.nifco-entry input[type="text"],
+.nifco-entry input[type="number"] {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+}
+
+/* Botón para eliminar NIFCO */
+.remove-nifco-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1rem;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.remove-nifco-btn:hover {
+    background-color: #e60000;
+}
+
+
+/* Mensaje de no hay planes */
+.no-plans-message {
+    text-align: center;
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+  }
+/* Media Queries */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+
+    header {
+        padding: 0.5rem 1rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+        font-size: 16px;
+    }
+}
