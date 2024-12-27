@@ -1,0 +1,214 @@
+/* Estilos generales para el cuerpo del documento */
+body {
+    font-family: 'Arial', sans-serif; /* Fuente del documento */
+    margin: 0; /* Eliminar márgenes */
+    padding: 0; /* Eliminar relleno */
+    background-color: #f4f4f4; /* Color de fondo */
+    color: #333; /* Color del texto */
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 700px; /* Ancho máximo del contenedor reducido */
+    margin: 10px auto; /* Centrar el contenedor horizontalmente y reducir margen superior/inferior */
+    background: #fff; /* Color de fondo del contenedor */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra del contenedor */
+    overflow: hidden; /* Ocultar contenido desbordado */
+    padding: 15px; /* Relleno interno reducido */
+    position: relative; /* Posicionamiento relativo */
+}
+
+/* Encabezado del documento */
+.header {
+    display: flex; /* Usar flexbox para el diseño */
+    justify-content: space-between; /* Espacio entre los elementos */
+    align-items: center; /* Alinear elementos al centro */
+    border-bottom: 2px solid #333; /* Línea inferior */
+    padding-bottom: 10px; /* Relleno inferior reducido */
+    margin-bottom: 10px; /* Margen inferior reducido */
+}
+
+/* Estilo para la sección izquierda del encabezado */
+.header .left {
+    text-align: center; /* Alinear texto al centro */
+}
+
+/* Estilo para la sección derecha del encabezado */
+.header .right {
+    text-align: center; /* Alinear texto al centro */
+}
+
+/* Estilo para la imagen del logo */
+.header img {
+    max-width: 50px; /* Ancho máximo de la imagen reducido */
+    margin-bottom: 5px; /* Margen inferior para separar del texto */
+}
+
+/* Información de la empresa */
+.company-info {
+    text-align: center; /* Alinear texto al centro */
+    margin: 5px 0; /* Margen superior e inferior reducido */
+    font-size: 12px; /* Tamaño de fuente reducido */
+}
+
+/* Línea entre el logo y la información de la empresa */
+.header .separator {
+    width: 100%;
+    border-top: 1px solid #333; /* Línea superior */
+    margin: 5px 0; /* Margen superior e inferior reducido */
+}
+
+/* Detalles de facturación y envío */
+.details {
+    display: flex; /* Usar flexbox para el diseño */
+    justify-content: space-between; /* Espacio entre los elementos */
+    border: 1px solid #ddd; /* Borde */
+    padding: 10px; /* Relleno interno reducido */
+    border-radius: 6px; /* Bordes redondeados */
+    margin-bottom: 10px; /* Margen inferior reducido */
+    background-color: #fafafa; /* Color de fondo */
+}
+
+/* Estilo para las secciones de facturación y envío */
+.details .bill-to,
+.details .ship-to {
+    width: 45%; /* Ancho del 45% */
+}
+
+/* Estilo para los párrafos dentro de los detalles */
+.details p {
+    margin: 3px 0; /* Margen superior e inferior reducido */
+    font-size: 10px; /* Tamaño de fuente reducido */
+}
+
+/* Estilo para el texto en negrita dentro de los detalles */
+.details strong {
+    color: #333; /* Color del texto */
+}
+
+/* Contenedor de la tabla */
+.table-container {
+    margin-top: 10px; /* Margen superior reducido */
+}
+
+/* Estilo para los encabezados de las tablas */
+h2 {
+    font-size: 16px; /* Tamaño de fuente reducido */
+    margin-bottom: 5px; /* Margen inferior reducido */
+    color: #444; /* Color del texto */
+}
+
+/* Estilo para las tablas */
+table {
+    width: 100%; /* Ancho completo */
+    border-collapse: collapse; /* Colapsar bordes */
+    margin-bottom: 10px; /* Margen inferior reducido */
+    font-size: 10px; /* Tamaño de fuente reducido */
+}
+
+/* Estilo para los encabezados de las tablas */
+table thead {
+    background-color: #333; /* Color de fondo */
+    color: #fff; /* Color del texto */
+}
+
+/* Estilo para las celdas de las tablas */
+table,
+th,
+td {
+    border: 1px solid #ddd; /* Borde */
+}
+
+/* Estilo para las celdas de las tablas */
+th,
+td {
+    padding: 5px; /* Relleno interno reducido */
+    text-align: center; /* Alinear texto al centro */
+}
+
+/* Estilo para los encabezados de las tablas */
+th {
+    font-weight: bold; /* Negrita */
+}
+
+/* Estilo para las filas pares de las tablas */
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Color de fondo */
+}
+
+/* Estilo para el botón de impresión */
+.no-print {
+    text-align: center; /* Alinear texto al centro */
+    margin-top: 10px; /* Margen superior reducido */
+}
+
+/* Estilo para el botón de impresión */
+.no-print button {
+    background-color: #333; /* Color de fondo */
+    color: #fff; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 8px 15px; /* Relleno interno reducido */
+    border-radius: 6px; /* Bordes redondeados */
+    font-size: 12px; /* Tamaño de fuente reducido */
+    cursor: pointer; /* Cursor de puntero */
+    transition: background-color 0.3s ease; /* Transición de color de fondo */
+}
+
+/* Estilo para el botón de impresión al pasar el ratón */
+.no-print button:hover {
+    background-color: #555; /* Color de fondo */
+}
+
+/* Estilo para las firmas */
+.signatures {
+    display: flex; /* Usar flexbox para el diseño */
+    justify-content: space-between; /* Espacio entre los elementos */
+    margin-top: 300px; /* Margen superior */
+    font-size: 13px; /* Tamaño de fuente  */
+}
+
+.signature {
+    width: 25%; /* Ancho del 45% */
+    text-align: center; /* Alinear texto al centro */
+}
+
+.signature .line {
+    border-top: 1px solid #333; /* Línea superior */
+    margin-top: 1px; /* Margen superior */
+}
+
+/* Estilos específicos para la impresión */
+@media print {
+    body {
+        -webkit-print-color-adjust: exact; /* Ajuste de color para impresión en WebKit */
+        print-color-adjust: exact; /* Ajuste de color para impresión */
+    }
+
+    .no-print {
+        display: none; /* Ocultar elementos con la clase no-print */
+    }
+
+    .container {
+        border: none; /* Sin borde */
+        box-shadow: none; /* Sin sombra */
+    }
+
+    .header {
+        border-bottom: 2px solid #000; /* Línea inferior */
+    }
+
+    table thead {
+        background-color: #000 !important; /* Color de fondo */
+        color: #fff !important; /* Color del texto */
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #e0e0e0 !important; /* Color de fondo */
+    }
+
+    .details {
+        border: 1px solid #000; /* Borde */
+        background-color: #f0f0f0; /* Color de fondo */
+    }
+}
