@@ -1,5 +1,8 @@
 <?php
 require 'back_add_plan_trabajo.php';
+
+$message = isset($_GET['message']) ? $_GET['message'] : '';
+$messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +24,7 @@ require 'back_add_plan_trabajo.php';
     <main>
         <h1>Agregar Plan de Trabajo</h1>
 
-        <?php if (isset($message)): ?>
+        <?php if (!empty($message)): ?>
             <div class="notification <?php echo $messageType; ?> show">
                 <?php echo $message; ?>
             </div>
@@ -71,7 +74,17 @@ require 'back_add_plan_trabajo.php';
                                             <td class="custom-td"><?php echo htmlspecialchars($plan['nifco_numero']); ?></td>
                                             <td class="custom-td"><?php echo number_format($plan['piezas']); ?></td>
                                             <td class="custom-td"><?php echo number_format($plan['piezas_registradas']); ?></td>
-                                            <td class="custom-td"><?php echo number_format($plan['diferencia']); ?></td>
+                                            <td class="custom-td">
+                                                <?php 
+                                                $diferencia = $plan['piezas_registradas'] - $plan['piezas'];
+                                                if ($diferencia > 0): ?>
+                                                    <span class="difference positive">+<?php echo number_format($diferencia); ?></span>
+                                                <?php elseif ($diferencia < 0): ?>
+                                                    <span class="difference negative"><?php echo number_format($diferencia); ?></span>
+                                                <?php else: ?>
+                                                    <span class="difference zero"><?php echo number_format($diferencia); ?></span>
+                                                <?php endif; ?>
+                                            </td>
                                             <td class="custom-td">
                                                 <a href="edit_plan_trabajo.php?id=<?php echo $plan['id']; ?>" class="btn-edit">Editar</a>
                                                 <a href="?delete_id=<?php echo $plan['id']; ?>" class="btn-delete" onclick="return confirm('¿Estás seguro de que deseas eliminar este plan de trabajo?');">Eliminar</a>

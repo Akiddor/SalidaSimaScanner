@@ -10,6 +10,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($nifcos as $index => $nifco_numero) {
         $piezas_count = $piezas[$index];
 
+        // Verificar si el NIFCO existe en la tabla Modelos
+        $modelCheckQuery = "SELECT * FROM Modelos WHERE nifco_numero = '$nifco_numero'";
+        $modelCheckResult = mysqli_query($enlace, $modelCheckQuery);
+
+        if (mysqli_num_rows($modelCheckResult) == 0) {
+            $message = "El número de NIFCO '$nifco_numero' no existe en la base de datos de NIFCO.";
+            $messageType = "error";
+            break;
+        }
+
         // Verificar si ya existe un registro para el mismo NIFCO y fecha
         if (in_array($nifco_numero, $nifcosAgregados)) {
             $message = "El número de NIFCO '$nifco_numero' ya ha sido agregado en este formulario.";

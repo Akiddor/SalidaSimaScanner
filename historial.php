@@ -20,7 +20,7 @@ $historialResult = mysqli_query($enlace, $historialQuery);
 <body>
     <header>
         <a href="index.php" class="home-icon"><i class="fas fa-home"></i></a>
-        <a href="historial.php" class="history-icon"><i class="fas fa-history"></i> Historial</a>
+        
     </header>
     <h1>Historial de Días Archivados</h1>
 

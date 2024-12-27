@@ -73,10 +73,15 @@ CREATE TABLE Historial (
     FOREIGN KEY (day_id) REFERENCES Days(id) ON DELETE CASCADE
 );
 use salidadbsima;
- 
-
-
-
+ -- Nueva actualizacion y funcionalidad
+ use salidadbsima;
+ CREATE TABLE PlanTrabajo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nifco_numero VARCHAR(255) NOT NULL,
+    fecha DATE NOT NULL,
+    piezas INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 -- Indexes for performance
 CREATE INDEX idx_folio_number ON Folios(folio_number);
