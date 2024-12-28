@@ -4,10 +4,9 @@ require 'backend/db/db.php';
 $response = ['success' => false, 'message' => ''];
 
 if (isset($_GET['id'])) {
-    $pallet_id = intval($_GET['id']);
-    $delete_query = "DELETE FROM Pallets WHERE id = $pallet_id";
-
-    if (mysqli_query($enlace, $delete_query)) {
+    $pallet_id = $_GET['id'];
+    $deleteQuery = "DELETE FROM Pallets WHERE id = $pallet_id";
+    if (mysqli_query($enlace, $deleteQuery)) {
         $response['success'] = true;
         $response['message'] = 'Pallet eliminado exitosamente.';
     } else {
@@ -17,5 +16,6 @@ if (isset($_GET['id'])) {
     $response['message'] = 'ID de pallet no proporcionado.';
 }
 
+header('Content-Type: application/json');
 echo json_encode($response);
 ?>

@@ -2,6 +2,19 @@
 require 'backend/db/db.php';
 require 'backindex.php';
 
+// Manejar la eliminación de registros
+if (isset($_GET['delete_id'])) {
+    $delete_id = $_GET['delete_id'];
+    $deleteQuery = "DELETE FROM PlanTrabajo WHERE id = $delete_id";
+    if (mysqli_query($enlace, $deleteQuery)) {
+        $message = "Plan de trabajo eliminado exitosamente.";
+        $messageType = "success";
+    } else {
+        $message = "Error al eliminar el plan de trabajo: " . mysqli_error($enlace);
+        $messageType = "error";
+    }
+}
+
 // Obtener las fechas de los días en producción ordenadas de los más recientes a los más antiguos
 $dateQuery = "SELECT day_date FROM Days WHERE status = 'produccion' ORDER BY day_date DESC";
 $dateResult = mysqli_query($enlace, $dateQuery);
@@ -236,7 +249,7 @@ $numDays = mysqli_num_rows($dateResult);
     </div>
 </main>
 
-    <script src="index.js"></script>
+<script src="index.js"></script>
 </body>
 
 </html>

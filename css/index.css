@@ -235,7 +235,7 @@ button i {
 .custom-th,
 .custom-td {
   border: 1px solid #ccc;
-  padding: 0.8em;
+  padding: 0.4em 0.8em; /* Reducir el padding vertical */
   text-align: left;
 }
 
@@ -251,7 +251,6 @@ button i {
 .custom-tr:nth-child(even) .custom-td {
   background-color: #f9f9f9;
 }
-
 /* Print Button Styling */
 #print-selected-container {
   text-align: center;

@@ -91,29 +91,28 @@ document.addEventListener('DOMContentLoaded', function () {
             window.open(url, 'Agregar Item', 'width=600,height=400');
         });
     });
-
-    // Asociar eventos a los botones de eliminar pallet
-    document.querySelectorAll('.btn-delete-pallet').forEach(button => {
-        button.addEventListener('click', function () {
-            const palletId = this.getAttribute('data-pallet-id');
-            if (confirm('¿Estás seguro de que deseas eliminar este pallet?')) {
-                fetch(`delete_pallet.php?id=${palletId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            document.querySelector(`.pallet[data-pallet-id="${palletId}"]`).remove();
-                            alert(data.message);
-                        } else {
-                            alert(data.message || 'Error al eliminar el pallet.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error al eliminar el pallet.');
-                    });
-            }
-        });
+// Asociar eventos a los botones de eliminar pallet
+document.querySelectorAll('.btn-delete-pallet').forEach(button => {
+    button.addEventListener('click', function () {
+        const palletId = this.getAttribute('data-pallet-id');
+        if (confirm('¿Estás seguro de que deseas eliminar este pallet?')) {
+            fetch(`delete_pallet.php?id=${palletId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector(`.accordion-item[data-pallet-id="${palletId}"]`).remove();
+                        alert(data.message);
+                    } else {
+                        alert(data.message || 'Error al eliminar el pallet.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al eliminar el pallet.');
+                });
+        }
     });
+});
 
 
     // Asociar eventos a los botones de editar item
