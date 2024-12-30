@@ -1,67 +1,63 @@
 <?php
-require 'backend/db/db.php';
+// Configuración inicial
+ob_start();
+header('Content-Type: application/json');
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
+require 'backend/db/db.php';
 $response = ['success' => false, 'message' => ''];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $part_number = strtoupper(mysqli_real_escape_string($enlace, $_POST['part_number']));
-    $serial_number = strtoupper(mysqli_real_escape_string($enlace, $_POST['serial_number']));
-    $quantity = strtoupper(mysqli_real_escape_string($enlace, $_POST['quantity']));
-    $pallet_id = mysqli_real_escape_string($enlace, $_POST['pallet_id']);
-    $folio_id = mysqli_real_escape_string($enlace, $_POST['folio_id']);
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $serial_number = strtoupper(mysqli_real_escape_string($enlace, $_POST['serial_number']));
+        $pallet_id = mysqli_real_escape_string($enlace, $_POST['pallet_id']);
+        $folio_id = mysqli_real_escape_string($enlace, $_POST['folio_id']);
 
-    // Limpiar los valores escaneados
-    $part_number = preg_replace('/^P/', '', $part_number);
-    $serial_number = preg_replace('/^1S/', '', $serial_number);
-    $quantity = preg_replace('/^Q/', '', $quantity);
+        // Limpiar el valor del número de serie
+        $serial_number = preg_replace('/^1S/', '', $serial_number);
+        $serial_number = preg_replace('/[\s-]/', '', $serial_number);
 
-    // Eliminar espacios y guiones
-    $part_number = preg_replace('/[\s-]/', '', $part_number);
-    $serial_number = preg_replace('/[\s-]/', '', $serial_number);
-    $quantity = preg_replace('/[\s-]/', '', $quantity);
+        // Verificar si el número de serie existe en calidad_cajas_scanned y tiene estado 'Entrada'
+        $check_serial_query = "SELECT * FROM calidad_cajas_scanned WHERE serial_number = '$serial_number' AND status = 'Entrada'";
+        $check_serial_result = mysqli_query($enlace, $check_serial_query);
 
-    // Buscar en tabla Modelos
-    $search_model_query = "SELECT id, nifco_numero FROM Modelos WHERE 
-        LOWER(numero_parte) = LOWER('$part_number') OR 
-        LOWER(nifco_numero) = LOWER('$part_number')";
-    $model_result = mysqli_query($enlace, $search_model_query);
+        if (!$check_serial_result) {
+            throw new Exception("Error en la consulta SQL: " . mysqli_error($enlace));
+        }
 
-    if (!$model_result) {
-        $response['message'] = "Error en la consulta SQL: " . mysqli_error($enlace);
-    } else if (mysqli_num_rows($model_result) > 0) {
-        $model_info = mysqli_fetch_assoc($model_result);
-        $model_id = $model_info['id'];
-        $nifco_numero = $model_info['nifco_numero'];
+        if (mysqli_num_rows($check_serial_result) > 0) {
+            $row = mysqli_fetch_assoc($check_serial_result);
+            $quantity = $row['quantity'];
+            $part_id = $row['part_id'];
 
-        $quantity = preg_replace('/\D/', '', $quantity);
-
-        if (!is_numeric($quantity) || (int)$quantity <= 0) {
-            $response['message'] = "Cantidad inválida. Por favor, ingrese un número válido.";
-        } else {
-            $quantity = (int)$quantity;
-
-            // Verificar si el número de serie ya existe en cualquier pallet
-            $check_serial_query = "SELECT COUNT(*) as count FROM Cajas_scanned WHERE serial_number = '$serial_number'";
-            $check_serial_result = mysqli_query($enlace, $check_serial_query);
-            $serial_check = mysqli_fetch_assoc($check_serial_result);
-            if ($serial_check['count'] > 0) {
-                $response['message'] = "El número de serie ya existe en otro pallet. Por favor, utiliza un número de serie diferente.";
-            } else {
-                // Insertar el registro en la tabla Cajas_scanned
-                $insert_query = "INSERT INTO Cajas_scanned (part_id, pallet_id, serial_number, quantity)
-                                 VALUES ($model_id, $pallet_id, '$serial_number', $quantity)";
-                if (mysqli_query($enlace, $insert_query)) {
-                    $response['success'] = true;
-                    $response['message'] = "Registro agregado exitosamente. NIFCO: $nifco_numero";
-                } else {
-                    $response['message'] = "Error al agregar el registro: " . mysqli_error($enlace);
-                }
+            // Actualizar el estado del registro en calidad_cajas_scanned a 'Salida'
+            $update_status_query = "UPDATE calidad_cajas_scanned SET status = 'Salida' WHERE serial_number = '$serial_number'";
+            if (!mysqli_query($enlace, $update_status_query)) {
+                throw new Exception("Error al actualizar el estado del registro: " . mysqli_error($enlace));
             }
+
+            // Insertar el registro en la tabla Cajas_scanned
+            $insert_query = "INSERT INTO Cajas_scanned (serial_number, pallet_id, part_id, quantity) VALUES ('$serial_number', '$pallet_id', '$part_id', '$quantity')";
+            if (!mysqli_query($enlace, $insert_query)) {
+                throw new Exception("Error al agregar el registro: " . mysqli_error($enlace));
+            }
+
+            $response['success'] = true;
+            $response['message'] = "Registro agregado exitosamente.";
+        } else {
+            throw new Exception("El número de serie no existe en la tabla de calidad o ya ha sido marcado como 'Salida'.");
         }
     } else {
-        $response['message'] = "Número de parte no encontrado en la base de datos.";
+        throw new Exception("Método de solicitud no válido.");
     }
+} catch (Exception $e) {
+    $response['message'] = $e->getMessage();
+    error_log($e->getMessage());
+} finally {
+    ob_end_clean();
+    echo json_encode($response);
+    exit;
 }
-
-echo json_encode($response);
 ?>

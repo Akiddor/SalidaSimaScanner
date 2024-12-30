@@ -7,134 +7,140 @@ require 'backend/db/db.php';
 $message = '';
 $messageType = '';
 
+// Constantes para estados y mensajes
+define('STATUS_ARCHIVADO', 'archivado');
+define('STATUS_PRODUCCION', 'produccion');
+
 /**
- * Función para archivar un día
+ * Función para archivar un día.
  *
- * @param $enlace Enlace a la base de datos
- * @param $day_date Fecha del día a archivar
+ * @param mysqli $enlace Enlace a la base de datos
+ * @param string $day_date Fecha del día a archivar
+ * @return bool
  */
 function archiveDay($enlace, $day_date) {
-    // Marcar el día como archivado en la tabla Days
-    $archiveDayQuery = "UPDATE Days SET status = 'archivado' WHERE day_date = '$day_date'";
-    mysqli_query($enlace, $archiveDayQuery);
+    $query = "UPDATE Days SET status = ? WHERE day_date = ?";
+    $stmt = $enlace->prepare($query);
+    $status = STATUS_ARCHIVADO;
+
+    $stmt->bind_param('ss', $status, $day_date);
+    return $stmt->execute();
 }
 
 // Crear día
-if (isset($_POST['create_day'])) {
-    $day_date = mysqli_real_escape_string($enlace, $_POST['day_date']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['create_day'])) {
+        $day_date = $enlace->real_escape_string($_POST['day_date']);
+        $query = "SELECT 1 FROM Days WHERE day_date = ?";
+        $stmt = $enlace->prepare($query);
+        $stmt->bind_param('s', $day_date);
+        $stmt->execute();
+        $stmt->store_result();
 
-    // Verificar si ya existe un registro para esta fecha
-    $check_day_query = "SELECT * FROM Days WHERE day_date = '$day_date'";
-    $check_day_result = mysqli_query($enlace, $check_day_query);
-
-    if (mysqli_num_rows($check_day_result) > 0) {
-        $message = "Ya existe un registro para esta fecha: " . $day_date;
-        $messageType = 'error';
-    } else {
-        $create_day_query = "INSERT INTO Days (day_date, status) VALUES ('$day_date', 'produccion')";
-
-        if (mysqli_query($enlace, $create_day_query)) {
-            $message = "Día creado exitosamente: " . $day_date;
-            $messageType = 'success';
+        if ($stmt->num_rows > 0) {
+            $message = "Ya existe un registro para esta fecha: $day_date";
+            $messageType = 'error';
         } else {
-            $message = "Error al crear el día: " . mysqli_error($enlace);
+            $insertQuery = "INSERT INTO Days (day_date, status) VALUES (?, ?)";
+            $stmtInsert = $enlace->prepare($insertQuery);
+            $status = STATUS_PRODUCCION;
+
+            $stmtInsert->bind_param('ss', $day_date, $status);
+            if ($stmtInsert->execute()) {
+                $message = "Día creado exitosamente: $day_date";
+                $messageType = 'success';
+            } else {
+                $message = "Error al crear el día: " . $stmtInsert->error;
+                $messageType = 'error';
+            }
+        }
+    }
+
+    // Crear folio
+    if (isset($_POST['create_folio'])) {
+        $folio_date = $enlace->real_escape_string($_POST['folio_date']);
+        $query = "SELECT id FROM Days WHERE day_date = ?";
+        $stmt = $enlace->prepare($query);
+        $stmt->bind_param('s', $folio_date);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($row = $result->fetch_assoc()) {
+            $day_id = $row['id'];
+
+            $folioQuery = "SELECT COALESCE(MAX(CAST(SUBSTRING(folio_number, 7) AS UNSIGNED)), 0) + 1 AS next_folio 
+                           FROM Folios WHERE folio_number LIKE 'SIMA-%'";
+            $folioResult = $enlace->query($folioQuery);
+            $next_folio = $folioResult->fetch_assoc()['next_folio'];
+            $folio_number = 'SIMA-' . str_pad($next_folio, 6, '0', STR_PAD_LEFT);
+
+            $insertFolioQuery = "INSERT INTO Folios (folio_number, day_id, departure_date) VALUES (?, ?, ?)";
+            $stmtFolio = $enlace->prepare($insertFolioQuery);
+            $stmtFolio->bind_param('sis', $folio_number, $day_id, $folio_date);
+
+            if ($stmtFolio->execute()) {
+                $message = "Folio creado exitosamente: $folio_number";
+                $messageType = 'success';
+            } else {
+                $message = "Error al crear el folio: " . $stmtFolio->error;
+                $messageType = 'error';
+            }
+        } else {
+            $message = "No se encontró el día para crear el folio.";
             $messageType = 'error';
         }
     }
 
-    // Redirigir al usuario a la misma página con el mensaje correspondiente
-    header("Location: index.php?message=" . urlencode($message) . "&messageType=" . urlencode($messageType));
-    exit;
-}
+    // Crear pallet
+    if (isset($_POST['create_pallet'])) {
+        $pallet_date = $enlace->real_escape_string($_POST['pallet_date']);
+        $folio_id = $enlace->real_escape_string($_POST['folio_id']);
 
-// Crear Folio
-if (isset($_POST['create_folio'])) {
-    $folio_date = mysqli_real_escape_string($enlace, $_POST['folio_date']);
+        $countPalletsQuery = "SELECT COUNT(*) as pallet_count FROM Pallets WHERE folio_id = ?";
+        $stmt = $enlace->prepare($countPalletsQuery);
+        $stmt->bind_param('i', $folio_id);
+        $stmt->execute();
+        $countResult = $stmt->get_result();
+        $pallet_count = $countResult->fetch_assoc()['pallet_count'];
 
-    // Buscar el día correspondiente
-    $find_day_query = "SELECT id FROM Days WHERE day_date = '$folio_date'";
-    $find_day_result = mysqli_query($enlace, $find_day_query);
+        $pallet_number = 'Pallet ' . ($pallet_count + 1);
 
-    if (mysqli_num_rows($find_day_result) > 0) {
-        $day = mysqli_fetch_assoc($find_day_result);
-        $day_id = $day['id'];
+        $insertPalletQuery = "INSERT INTO Pallets (folio_id, pallet_number) VALUES (?, ?)";
+        $stmtInsert = $enlace->prepare($insertPalletQuery);
+        $stmtInsert->bind_param('is', $folio_id, $pallet_number);
 
-        // Generar número de folio
-        $folio_number_query = "SELECT COALESCE(MAX(CAST(SUBSTRING(folio_number, 7) AS UNSIGNED)), 0) + 1 AS next_folio
-                               FROM Folios
-                               WHERE folio_number LIKE 'SIMA-%'";
-        $folio_number_result = mysqli_query($enlace, $folio_number_query);
-        $next_folio = mysqli_fetch_assoc($folio_number_result)['next_folio'];
-        $folio_number = 'SIMA-' . str_pad($next_folio, 6, '0', STR_PAD_LEFT);
+        if ($stmtInsert->execute()) {
+            $updateFolioQuery = "UPDATE Folios SET total_pallets = total_pallets + 1 WHERE id = ?";
+            $stmtUpdate = $enlace->prepare($updateFolioQuery);
+            $stmtUpdate->bind_param('i', $folio_id);
+            $stmtUpdate->execute();
 
-        // Insertar nuevo folio
-        $create_folio_query = "INSERT INTO Folios (folio_number, day_id, departure_date)
-                               VALUES ('$folio_number', $day_id, '$folio_date')";
-
-        if (mysqli_query($enlace, $create_folio_query)) {
-            $message = "Folio creado exitosamente: " . $folio_number;
+            $message = "Pallet creado exitosamente: $pallet_number";
             $messageType = 'success';
         } else {
-            $message = "Error al crear el folio: " . mysqli_error($enlace);
+            $message = "Error al crear el pallet: " . $stmtInsert->error;
             $messageType = 'error';
         }
-    } else {
-        $message = "No se encontró el día para crear el folio.";
-        $messageType = 'error';
     }
 
-    // Redirigir al usuario a la misma página con el mensaje correspondiente
-    header("Location: index.php?message=" . urlencode($message) . "&messageType=" . urlencode($messageType));
-    exit;
-}
-
-// Crear Pallet
-if (isset($_POST['create_pallet'])) {
-    $pallet_date = mysqli_real_escape_string($enlace, $_POST['pallet_date']);
-    $folio_id = mysqli_real_escape_string($enlace, $_POST['folio_id']);
-
-    // Contar pallets existentes para este folio
-    $count_pallets_query = "SELECT COUNT(*) as pallet_count FROM Pallets WHERE folio_id = $folio_id";
-    $count_pallets_result = mysqli_query($enlace, $count_pallets_query);
-    $pallet_count = mysqli_fetch_assoc($count_pallets_result)['pallet_count'];
-
-    // Generar número de pallet
-    $pallet_number = 'Pallet ' . ($pallet_count + 1);
-
-    // Insertar nuevo pallet
-    $create_pallet_query = "INSERT INTO Pallets (folio_id, pallet_number) VALUES ($folio_id, '$pallet_number')";
-
-    if (mysqli_query($enlace, $create_pallet_query)) {
-        // Actualizar total de pallets en folio
-        $update_folio_query = "UPDATE Folios SET total_pallets = total_pallets + 1 WHERE id = $folio_id";
-        mysqli_query($enlace, $update_folio_query);
-
-        $message = "Pallet creado exitosamente: " . $pallet_number;
-        $messageType = 'success';
-    } else {
-        $message = "Error al crear el pallet: " . mysqli_error($enlace);
-        $messageType = 'error';
+    // Archivar día manualmente
+    if (isset($_POST['archive_day'])) {
+        $day_date = $enlace->real_escape_string($_POST['archive_day']);
+        if (archiveDay($enlace, $day_date)) {
+            $message = "Día archivado exitosamente: $day_date";
+            $messageType = 'success';
+        } else {
+            $message = "Error al archivar el día.";
+            $messageType = 'error';
+        }
     }
 
-    // Redirigir al usuario a la misma página con el mensaje correspondiente
-    header("Location: index.php?message=" . urlencode($message) . "&messageType=" . urlencode($messageType));
-    exit;
-}
-
-// Archivar día manualmente
-if (isset($_POST['archive_day'])) {
-    $day_date = mysqli_real_escape_string($enlace, $_POST['archive_day']);
-    archiveDay($enlace, $day_date);
-
-    $message = "Día archivado exitosamente: " . $day_date;
-    $messageType = 'success';
-
-    // Redirigir al usuario a la misma página con el mensaje correspondiente
+    // Redirigir con mensaje
     header("Location: index.php?message=" . urlencode($message) . "&messageType=" . urlencode($messageType));
     exit;
 }
 
 // Obtener fechas únicas de la tabla Days
 $dateQuery = "SELECT DISTINCT day_date as pallet_date FROM Days ORDER BY day_date DESC";
-$dateResult = mysqli_query($enlace, $dateQuery);
+$dateResult = $enlace->query($dateQuery);
 ?>

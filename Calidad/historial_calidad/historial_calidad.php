@@ -1,5 +1,6 @@
 <?php
-require 'backend/db/db.php';
+require '../../backend/db/db.php';
+
 
 // Obtener los días archivados ordenados de los más recientes a los más antiguos
 $historialQuery = "SELECT * FROM Days WHERE status = 'archivado' ORDER BY day_date DESC";
@@ -10,7 +11,7 @@ $historialResult = mysqli_query($enlace, $historialQuery);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial - SimaSolution | EMBARQUES</title>
+    <title>Historial - SimaSolution | CALIDAD</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/index.css">
@@ -19,10 +20,10 @@ $historialResult = mysqli_query($enlace, $historialQuery);
 </head>
 <body>
     <header>
-        <a href="index.php" class="home-icon"><i class="fas fa-home"></i></a>
+        <a href=".../scann.php" class="home-icon"><i class="fas fa-home"></i></a>
         
     </header>
-    <h1>Historial de Días Archivados | EMBARQUES</h1>
+    <h1>Historial de Días Archivados | CALIDAD</h1>
 
     <div class="accordion custom-accordion">
         <?php if ($historialResult && mysqli_num_rows($historialResult) > 0): ?>

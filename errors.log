@@ -1,0 +1,5 @@
+[30-Dec-2024 20:02:08 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'folio_id' in 'field list' in C:\Users\brian\OneDrive\Documentos\SalidaSima2.0-main\add_item.php:38
+Stack trace:
+#0 C:\Users\brian\OneDrive\Documentos\SalidaSima2.0-main\add_item.php(38): mysqli_query(Object(mysqli), 'INSERT INTO Caj...')
+#1 {main}
+  thrown in C:\Users\brian\OneDrive\Documentos\SalidaSima2.0-main\add_item.php on line 38

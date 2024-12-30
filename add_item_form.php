@@ -13,14 +13,8 @@
             <input type="hidden" name="pallet_id" value="<?php echo htmlspecialchars($_GET['pallet_id']); ?>">
             <input type="hidden" name="folio_id" value="<?php echo htmlspecialchars($_GET['folio_id']); ?>">
 
-            <label for="part_number">Número de Parte:</label>
-            <input type="text" id="part_number" name="part_number" required autofocus>
-
             <label for="serial_number">Serial:</label>
-            <input type="text" id="serial_number" name="serial_number" required>
-
-            <label for="quantity">Cantidad:</label>
-            <input type="text" id="quantity" name="quantity" required>
+            <input type="text" id="serial_number" name="serial_number" required autofocus>
 
             <button type="submit" name="registro">Registrar</button>
         </form>

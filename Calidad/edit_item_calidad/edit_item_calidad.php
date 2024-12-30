@@ -1,5 +1,5 @@
 <?php
-require 'backend/db/db.php';
+require '../../backend/db/db.php';
 
 // Lógica para manejar la actualización del registro
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -16,19 +16,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $part_id = $part_info['id'];
 
         // Verificar si el número de serie ya existe en cualquier otro registro
-        $check_serial_query = "SELECT COUNT(*) as count FROM Cajas_scanned WHERE serial_number = '$serial_number' AND id != $id";
+        $check_serial_query = "SELECT COUNT(*) as count FROM calidad_cajas_scanned WHERE serial_number = '$serial_number' AND id != $id";
         $check_serial_result = mysqli_query($enlace, $check_serial_query);
         $serial_check = mysqli_fetch_assoc($check_serial_result);
         if ($serial_check['count'] > 0) {
             $message = "El número de serie ya existe en otro registro. Por favor, utiliza un número de serie diferente.";
             $messageType = 'error';
         } else {
-            $update_query = "UPDATE Cajas_scanned SET part_id = '$part_id', serial_number = '$serial_number', quantity = $quantity WHERE id = $id";
+            $update_query = "UPDATE calidad_cajas_scanned SET part_id = '$part_id', serial_number = '$serial_number', quantity = $quantity WHERE id = $id";
             if (mysqli_query($enlace, $update_query)) {
                 $message = "Registro actualizado exitosamente.";
                 $messageType = 'success';
-                // Redirigir al usuario a index.php con el mensaje y el tipo de mensaje
-                header("Location: index.php?message=" . urlencode($message) . "&messageType=" . urlencode($messageType));
+                // Redirigir al usuario a scann.php con el mensaje y el tipo de mensaje
+                header("Location: ../scann.php?message=" . urlencode($message) . "&messageType=" . urlencode($messageType));
                 exit; // Terminar la ejecución del script después de la redirección
             } else {
                 $message = "Error al actualizar el registro: " . mysqli_error($enlace);
@@ -41,14 +41,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Redirigir al usuario con el mensaje y el tipo de mensaje
-    header("Location: edit_item.php?id=$id&message=" . urlencode($message) . "&messageType=" . urlencode($messageType));
+    header("Location: edit_item_calidad.php?id=$id&message=" . urlencode($message) . "&messageType=" . urlencode($messageType));
     exit; // Terminar la ejecución del script después de la redirección
 }
 
 // Obtener los datos del registro a editar
 if (isset($_GET['id'])) {
     $id = mysqli_real_escape_string($enlace, $_GET['id']);
-    $query = "SELECT cs.*, m.numero_parte FROM Cajas_scanned cs JOIN Modelos m ON cs.part_id = m.id WHERE cs.id = $id";
+    $query = "SELECT cs.*, m.numero_parte FROM calidad_cajas_scanned cs JOIN Modelos m ON cs.part_id = m.id WHERE cs.id = $id";
     $result = mysqli_query($enlace, $query);
     if ($result && mysqli_num_rows($result) > 0) {
         $registro = mysqli_fetch_assoc($result);
@@ -66,7 +66,7 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Item</title>
-    <link rel="stylesheet" href="/css/edit.css">
+    <link rel="stylesheet" href="./css/edit_item_calidad.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="simafa.png" type="image/sima">
     <script>
@@ -89,7 +89,7 @@ if (isset($_GET['id'])) {
 <body>
 <header>
     <!-- Enlaces a la página de inicio y al historial -->
-    <a href="index.php" class="home-icon"><i class="fas fa-home"></i></a>
+    <a href="../scann.php" class="home-icon"><i class="fas fa-home"></i></a>
 </header>
 <div class="container">
     <h1>Editar Item</h1>
