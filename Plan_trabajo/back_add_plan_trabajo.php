@@ -1,94 +1,101 @@
 <?php
+// Incluir archivo de conexión a la base de datos
 require '../backend/db/db.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+// Función para obtener los planes de trabajo por fecha
+function obtenerPlanesPorFecha($conexion) {
+    $query = "SELECT pt.*,
+              COALESCE(SUM(cs.quantity), 0) as piezas_registradas
+              FROM PlanTrabajo pt
+              LEFT JOIN Modelos m ON pt.nifco_numero = m.nifco_numero
+              LEFT JOIN Cajas_scanned cs ON m.id = cs.part_id
+              GROUP BY pt.id, pt.fecha, pt.nifco_numero
+              ORDER BY pt.fecha DESC, pt.nifco_numero";
+   
+    $resultado = $conexion->query($query);
+   
+    $planesPorFecha = array();
+    while ($row = $resultado->fetch_assoc()) {
+        $fecha = date('Y-m-d', strtotime($row['fecha']));
+        $planesPorFecha[$fecha][] = $row;
+    }
+   
+    return $planesPorFecha;
+}
+
+// Procesar el formulario cuando se envía
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fecha = $_POST['fecha'];
     $nifcos = $_POST['nifco_numero'];
     $piezas = $_POST['piezas'];
-    $nifcosAgregados = [];
-
-    foreach ($nifcos as $index => $nifco_numero) {
-        $piezas_count = $piezas[$index];
-
-        // Verificar si el NIFCO existe en la tabla Modelos
-        $modelCheckQuery = "SELECT * FROM Modelos WHERE nifco_numero = '$nifco_numero'";
-        $modelCheckResult = mysqli_query($enlace, $modelCheckQuery);
-
-        if (mysqli_num_rows($modelCheckResult) == 0) {
-            $message = "El número de NIFCO '$nifco_numero' no existe en la base de datos de NIFCO.";
-            $messageType = "error";
-            break;
-        }
-
-        // Verificar si ya existe un registro para el mismo NIFCO y fecha
-        if (in_array($nifco_numero, $nifcosAgregados)) {
-            $message = "El número de NIFCO '$nifco_numero' ya ha sido agregado en este formulario.";
-            $messageType = "error";
-            break;
-        }
-
-        $checkQuery = "SELECT * FROM PlanTrabajo WHERE nifco_numero = '$nifco_numero' AND fecha = '$fecha'";
-        $checkResult = mysqli_query($enlace, $checkQuery);
-
-        if (mysqli_num_rows($checkResult) > 0) {
-            $message = "El número de NIFCO '$nifco_numero' ya tiene un plan de trabajo para la fecha '$fecha'.";
-            $messageType = "error";
-            break;
-        } else {
-            $query = "INSERT INTO PlanTrabajo (nifco_numero, fecha, piezas) VALUES ('$nifco_numero', '$fecha', '$piezas_count')";
-            if (mysqli_query($enlace, $query)) {
-                $message = "Plan de trabajo agregado exitosamente.";
-                $messageType = "success";
-                $nifcosAgregados[] = $nifco_numero;
-            } else {
-                $message = "Error al agregar el plan de trabajo: " . mysqli_error($enlace);
-                $messageType = "error";
-                break;
+   
+    $exito = true;
+    $mensaje = '';
+   
+    // Iniciar transacción
+    $enlace->begin_transaction();
+   
+    try {
+        // Recorrer cada NIFCO y sus piezas
+        for ($i = 0; $i < count($nifcos); $i++) {
+            $nifco = $enlace->real_escape_string($nifcos[$i]);
+            $cantidad = intval($piezas[$i]);
+           
+            // Verificar si ya existe un plan para este NIFCO en esta fecha
+            $checkQuery = "SELECT id FROM PlanTrabajo WHERE fecha = ? AND nifco_numero = ?";
+            $stmt = $enlace->prepare($checkQuery);
+            $stmt->bind_param("ss", $fecha, $nifco);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+           
+            if ($resultado->num_rows > 0) {
+                throw new Exception("Ya existe un plan de trabajo para el NIFCO $nifco en la fecha $fecha");
+            }
+           
+            // Insertar nuevo plan de trabajo
+            $insertQuery = "INSERT INTO PlanTrabajo (fecha, nifco_numero, piezas) VALUES (?, ?, ?)";
+            $stmt = $enlace->prepare($insertQuery);
+            $stmt->bind_param("ssi", $fecha, $nifco, $cantidad);
+           
+            if (!$stmt->execute()) {
+                throw new Exception("Error al guardar el plan de trabajo para el NIFCO $nifco");
             }
         }
+       
+        // Confirmar transacción
+        $enlace->commit();
+        $mensaje = "Plan de trabajo guardado correctamente";
+        $tipoMensaje = "success";
+       
+    } catch (Exception $e) {
+        // Revertir transacción en caso de error
+        $enlace->rollback();
+        $mensaje = $e->getMessage();
+        $tipoMensaje = "error";
+        $exito = false;
     }
+   
+    // Redirigir con mensaje
+    header("Location: add_plan_trabajo.php?message=" . urlencode($mensaje) . "&messageType=" . $tipoMensaje);
+    exit();
 }
 
-// Manejar la eliminación de registros
+// Manejar eliminación de plan de trabajo
 if (isset($_GET['delete_id'])) {
-    $delete_id = $_GET['delete_id'];
-    $deleteQuery = "DELETE FROM PlanTrabajo WHERE id = $delete_id";
-    if (mysqli_query($enlace, $deleteQuery)) {
-        $message = "Plan de trabajo eliminado exitosamente.";
-        $messageType = "success";
+    $id = intval($_GET['delete_id']);
+   
+    $deleteQuery = "DELETE FROM PlanTrabajo WHERE id = ?";
+    $stmt = $enlace->prepare($deleteQuery);
+    $stmt->bind_param("i", $id);
+   
+    if ($stmt->execute()) {
+        header("Location: add_plan_trabajo.php?message=Plan eliminado correctamente&messageType=success");
     } else {
-        $message = "Error al eliminar el plan de trabajo: " . mysqli_error($enlace);
-        $messageType = "error";
+        header("Location: add_plan_trabajo.php?message=Error al eliminar el plan&messageType=error");
     }
+    exit();
 }
 
-// Obtener los planes de trabajo existentes
-$planesQuery = "SELECT * FROM PlanTrabajo ORDER BY fecha DESC";
-$planesResult = mysqli_query($enlace, $planesQuery);
-
-// Agrupar planes de trabajo por fecha
-$planesPorFecha = [];
-if (mysqli_num_rows($planesResult) > 0) {
-    while ($plan = mysqli_fetch_assoc($planesResult)) {
-        $fecha = $plan['fecha'];
-        if (!isset($planesPorFecha[$fecha])) {
-            $planesPorFecha[$fecha] = [];
-        }
-
-        // Obtener la cantidad de piezas registradas para el mismo NIFCO y fecha
-        $nifco = $plan['nifco_numero'];
-        $registroQuery = "SELECT SUM(quantity) as total_piezas FROM Cajas_scanned cs JOIN Modelos m ON cs.part_id = m.id WHERE m.nifco_numero = '$nifco' AND DATE(cs.scan_timestamp) = '$fecha'";
-        $registroResult = mysqli_query($enlace, $registroQuery);
-        $registro = mysqli_fetch_assoc($registroResult);
-        $piezasRegistradas = $registro['total_piezas'] ?? 0;
-
-        // Calcular la diferencia
-        $diferencia = $plan['piezas'] - $piezasRegistradas;
-
-        $plan['piezas_registradas'] = $piezasRegistradas;
-        $plan['diferencia'] = $diferencia;
-
-        $planesPorFecha[$fecha][] = $plan;
-    }
-}
+// Obtener todos los planes de trabajo para mostrar en la página
+$planesPorFecha = obtenerPlanesPorFecha($enlace);
 ?>
