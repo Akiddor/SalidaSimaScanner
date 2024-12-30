@@ -38,7 +38,7 @@ $modelosResult = mysqli_query($enlace, $modelosQuery);
 <body>
     <header>
         <!-- Enlaces a la página de inicio y al historial -->
-        <a href="index.php" class="home-icon"><i class="fas fa-home"></i></a>
+        <a href="/Calidad/scann.php" class="home-icon"><i class="fas fa-home"></i></a>
         <nav>
            
         </nav>

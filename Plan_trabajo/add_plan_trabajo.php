@@ -1,5 +1,4 @@
-<?php
-require 'back_add_plan_trabajo.php';
+<?php require 'back_add_plan_trabajo.php';
 
 $message = isset($_GET['message']) ? $_GET['message'] : '';
 $messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
@@ -15,10 +14,12 @@ $messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
     <!-- Estilos de Font Awesome y fuentes de Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="/img/simafa.png" type="image/sima">
+
 </head>
 <body>
     <header>
-        <a href="../index.php" class="home-icon"><i class="fas fa-home"></i></a>
+        <a href="../Calidad/scann.php" class="home-icon"><i class="fas fa-home"></i></a>
     </header>
 
     <main>
@@ -65,6 +66,7 @@ $messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
                                         <th class="custom-th">Piezas Plan</th>
                                         <th class="custom-th">Piezas Registradas</th>
                                         <th class="custom-th">Diferencia</th>
+                                        <th class="custom-th">Estado</th>
                                         <th class="custom-th">Acciones</th>
                                     </tr>
                                 </thead>
@@ -84,6 +86,11 @@ $messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
                                                 <?php else: ?>
                                                     <span class="difference zero"><?php echo number_format($diferencia); ?></span>
                                                 <?php endif; ?>
+                                            </td>
+                                            <td class="custom-td">
+                                                <span class="<?php echo $plan['status'] == 'Entrada' ? 'status-entrada' : 'status-salida'; ?>">
+                                                    <?php echo htmlspecialchars($plan['status']); ?>
+                                                </span>
                                             </td>
                                             <td class="custom-td">
                                                 <a href="edit_plan_trabajo.php?id=<?php echo $plan['id']; ?>" class="btn-edit">Editar</a>

@@ -205,6 +205,19 @@
   .difference.zero {
     color: black;
   }
+
+
+  /* Clase para el estado 'Entrada' */
+.status-entrada {
+  color: red;
+  font-weight: bold;
+}
+
+/* Clase para el estado 'Salida' */
+.status-salida {
+  color: green;
+  font-weight: bold;
+}
   
   /* Notificaciones */
   .notification {

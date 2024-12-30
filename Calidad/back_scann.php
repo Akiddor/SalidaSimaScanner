@@ -5,13 +5,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['create_day'])) {
         // Crear un nuevo día
         $day_date = $_POST['day_date'];
-        $insertDayQuery = "INSERT INTO calidad_days (day_date) VALUES ('$day_date')";
-        if (mysqli_query($enlace, $insertDayQuery)) {
-            $message = "Día creado exitosamente.";
-            $messageType = "success";
-        } else {
-            $message = "Error al crear el día: " . mysqli_error($enlace);
+
+        // Verificar si la fecha ya existe
+        $checkDayQuery = "SELECT * FROM calidad_days WHERE day_date = '$day_date'";
+        $checkDayResult = mysqli_query($enlace, $checkDayQuery);
+
+        if (mysqli_num_rows($checkDayResult) > 0) {
+            $message = "La fecha ya existe.";
             $messageType = "error";
+        } else {
+            $insertDayQuery = "INSERT INTO calidad_days (day_date) VALUES ('$day_date')";
+            if (mysqli_query($enlace, $insertDayQuery)) {
+                $message = "Día creado exitosamente.";
+                $messageType = "success";
+            } else {
+                $message = "Error al crear el día: " . mysqli_error($enlace);
+                $messageType = "error";
+            }
         }
     } elseif (isset($_POST['delete_id'])) {
         // Eliminar un registro
