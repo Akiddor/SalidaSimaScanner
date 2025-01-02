@@ -38,10 +38,16 @@ body {
 
 /* Estilo para la sección derecha del encabezado */
 .header .right {
-    text-align: center; /* Alinear texto al centro */
+    text-align: right; /* Alinear texto a la derecha */
     flex: 0 0 auto; /* Mantener el tamaño original */
+    padding-right: 10px; /* Añadir relleno a la derecha */
 }
 
+.header .right p {
+    margin: 0; /* Eliminar márgenes */
+    font-size: 12px; /* Tamaño de fuente */
+    line-height: 1.5; /* Altura de línea */
+}
 /* Estilo para la imagen del logo */
 .header img {
     max-width: 40px; /* Aumentar el ancho máximo de la imagen */

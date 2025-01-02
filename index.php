@@ -215,7 +215,7 @@
                                                                                         <span
                                                                                             class="nifco-number"><?php echo htmlspecialchars($nifco); ?></span>:
                                                                                         <?php echo number_format($count['quantity']); ?>
-                                                                                        (<?php echo $count['count']; ?> veces)
+                                                                                        (<?php echo $count['count']; ?> CAJAS)
                                                                                     </li>
                                                                                 <?php endforeach; ?>
                                                                             </ul>
