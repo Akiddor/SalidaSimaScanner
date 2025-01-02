@@ -42,6 +42,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nifco = $enlace->real_escape_string($nifcos[$i]);
             $cantidad = intval($piezas[$i]);
            
+            // Verificar si el NIFCO existe en la tabla Modelos
+            $checkNifcoQuery = "SELECT id FROM Modelos WHERE nifco_numero = ?";
+            $stmt = $enlace->prepare($checkNifcoQuery);
+            $stmt->bind_param("s", $nifco);
+            $stmt->execute();
+            $resultadoNifco = $stmt->get_result();
+           
+            if ($resultadoNifco->num_rows == 0) {
+                throw new Exception("El NIFCO $nifco no existe en la tabla Modelos");
+            }
+           
             // Verificar si ya existe un plan para este NIFCO en esta fecha
             $checkQuery = "SELECT id FROM PlanTrabajo WHERE fecha = ? AND nifco_numero = ?";
             $stmt = $enlace->prepare($checkQuery);

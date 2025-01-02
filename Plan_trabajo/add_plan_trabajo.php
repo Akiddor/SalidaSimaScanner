@@ -62,6 +62,7 @@ $messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
                             <table class="custom-table">
                                 <thead>
                                     <tr>
+                                        <th class="custom-th">#</th>
                                         <th class="custom-th">NIFCO</th>
                                         <th class="custom-th">Piezas Plan</th>
                                         <th class="custom-th">Piezas Registradas</th>
@@ -70,8 +71,10 @@ $messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php $contador = 1; ?>
                                     <?php foreach ($planes as $plan): ?>
                                         <tr class="plan-row" data-piezas-plan="<?php echo $plan['piezas']; ?>" data-piezas-registradas="<?php echo $plan['piezas_registradas']; ?>">
+                                            <td class="custom-td"><?php echo $contador++; ?></td>
                                             <td class="custom-td"><?php echo htmlspecialchars($plan['nifco_numero']); ?></td>
                                             <td class="custom-td"><?php echo number_format($plan['piezas']); ?></td>
                                             <td class="custom-td"><?php echo number_format($plan['piezas_registradas']); ?></td>
@@ -86,7 +89,6 @@ $messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
                                                     <span class="difference zero"><?php echo number_format($diferencia); ?></span>
                                                 <?php endif; ?>
                                             </td>
-                                            
                                             <td class="custom-td">
                                                 <a href="edit_plan_trabajo.php?id=<?php echo $plan['id']; ?>" class="btn-edit">Editar</a>
                                                 <a href="?delete_id=<?php echo $plan['id']; ?>" class="btn-delete" onclick="return confirm('¿Estás seguro de que deseas eliminar este plan de trabajo?');">Eliminar</a>
