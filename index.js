@@ -37,27 +37,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Asociar evento al botón de imprimir pallets seleccionados
+      // Asociar evento al botón de imprimir pallets seleccionados
     document.getElementById('print-selected-pallets').addEventListener('click', function () {
         const folio = prompt('Por favor ingrese el número de folio:');
         if (folio) {
-            // Verificar si el folio existe en la base de datos
-            fetch(`check_folio.php?folio=${folio}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.exists) {
-                        const url = `print_pallets.php?pallets=${selectedPallets.join(',')}&folio=${folio}`;
-                        window.open(url, '_blank');
-                    } else {
-                        alert('El número de folio ingresado no existe. Por favor, ingrese un número de folio válido.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error al verificar el número de folio.');
-                });
+            const url = `print_pallets.php?pallets=${selectedPallets.join(',')}&folio=${folio}`;
+            window.open(url, '_blank');
         }
-    });
+    }); 
 
      // Asociar eventos a los botones de eliminar item
      document.querySelectorAll('.btn-delete-item').forEach(button => {

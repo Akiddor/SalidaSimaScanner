@@ -8,47 +8,13 @@ if (empty($pallet_ids)) {
     die('No se seleccionaron pallets para imprimir.');
 }
 
-// Obtener el ID del folio
-$folio_query = "SELECT id FROM Folios WHERE folio_number = '$folio'";
-$folio_result = mysqli_query($enlace, $folio_query);
-if ($folio_result && mysqli_num_rows($folio_result) > 0) {
-    $folio_row = mysqli_fetch_assoc($folio_result);
-    $folio_id = $folio_row['id'];
-
-    // Verificar que todos los pallet_ids existen en la tabla Pallets
-    $valid_pallet_ids = [];
-    foreach ($pallet_ids as $pallet_id) {
-        $check_pallet_query = "SELECT id FROM Pallets WHERE id = $pallet_id";
-        $check_pallet_result = mysqli_query($enlace, $check_pallet_query);
-        if ($check_pallet_result && mysqli_num_rows($check_pallet_result) > 0) {
-            $valid_pallet_ids[] = $pallet_id;
-        }
-    }
-
-    if (empty($valid_pallet_ids)) {
-        die('Ninguno de los pallets seleccionados existe en la base de datos.');
-    }
-
-    // Insertar los pallets válidos en la tabla folios_impresos
-    foreach ($valid_pallet_ids as $pallet_id) {
-        $insert_query = "INSERT INTO folios_impresos (pallet_id, folio_id) VALUES ($pallet_id, $folio_id)";
-        mysqli_query($enlace, $insert_query);
-    }
-} else {
-    echo "<script>
-          alert('El número de folio ingresado no existe.');
-          window.location.href = 'index.php';
-          </script>";
-    exit;
-}
-
 // Inicializar la variable $pallets como un array vacío
 $pallets = [];
 $total_quantity = 0; // Inicializar la variable para la sumatoria
 $nifcoCounts = []; // Inicializar la variable para el conteo de NIFCO
 
 // Obtener los detalles de los pallets seleccionados
-foreach ($valid_pallet_ids as $pallet_id) {
+foreach ($pallet_ids as $pallet_id) {
     $query = "SELECT cs.*, m.numero_parte, m.nifco_numero FROM Cajas_scanned cs JOIN Modelos m ON cs.part_id = m.id WHERE cs.pallet_id = $pallet_id";
     $result = mysqli_query($enlace, $query);
     while ($row = mysqli_fetch_assoc($result)) {
@@ -150,16 +116,25 @@ $fecha_actual = date('j') . '/' . $meses[intval(date('n'))] . '/' . date('Y');
 
         <!-- Mostrar conteo de NIFCO y total de cantidades -->
         <div class="nifco-summary">
-            <h5>Resumen de NIFCO</h5>
-            <ul>
-                <?php foreach ($nifcoCounts as $nifco => $count): ?>
-                    <li>
-                        <span class="nifco-number"><?php echo htmlspecialchars($nifco); ?></span>:
-                        <?php echo number_format($count['quantity']); ?>
-                        (<?php echo $count['count']; ?> BOXES)
-                    </li>
-                <?php endforeach; ?>
-            </ul>
+            <h5>Resumen de Packing</h5>
+            <table>
+                <thead>
+                    <tr>
+                        <th>NIFCO</th>
+                        <th>Quantity</th>
+                        <th>Boxes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($nifcoCounts as $nifco => $count): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($nifco); ?></td>
+                            <td><?php echo number_format($count['quantity']); ?></td>
+                            <td><?php echo $count['count']; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
 
         <section class="total-quantity">
