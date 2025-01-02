@@ -23,6 +23,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $messageType = "error";
             }
         }
+    } elseif (isset($_POST['archive_day'])) {
+        // Archivar un día
+        $archive_day = $_POST['archive_day'];
+        $archiveQuery = "UPDATE calidad_days SET status = 'archivado' WHERE day_date = '$archive_day'";
+        if (mysqli_query($enlace, $archiveQuery)) {
+            $message = "Día archivado exitosamente.";
+            $messageType = "success";
+        } else {
+            $message = "Error al archivar el día: " . mysqli_error($enlace);
+            $messageType = "error";
+        }
     } elseif (isset($_POST['delete_id'])) {
         // Eliminar un registro
         $delete_id = $_POST['delete_id'];

@@ -1,9 +1,8 @@
 <?php
 require '../../backend/db/db.php';
 
-
 // Obtener los días archivados ordenados de los más recientes a los más antiguos
-$historialQuery = "SELECT * FROM Days WHERE status = 'archivado' ORDER BY day_date DESC";
+$historialQuery = "SELECT * FROM calidad_days WHERE status = 'archivado' ORDER BY day_date DESC";
 $historialResult = mysqli_query($enlace, $historialQuery);
 ?>
 <!DOCTYPE html>
@@ -15,13 +14,11 @@ $historialResult = mysqli_query($enlace, $historialQuery);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/index.css">
-    <script src="index.js" defer></script>
-    <link rel="icon" href="simafa.png" type="image/sima">
+    <link rel="icon" href="/img/simafa.png" type="image/sima">
 </head>
 <body>
     <header>
-        <a href=".../scann.php" class="home-icon"><i class="fas fa-home"></i></a>
-        
+        <a href="../scann.php" class="home-icon"><i class="fas fa-home"></i></a>
     </header>
     <h1>Historial de Días Archivados | CALIDAD</h1>
 
@@ -36,11 +33,64 @@ $historialResult = mysqli_query($enlace, $historialQuery);
                             <button type="submit" class="btn btn-primary">Mandar a Producción</button>
                         </form>
                     </div>
+                    <div class="accordion-body custom-accordion-body" style="display: none;">
+                        <!-- Obtener y mostrar los registros de calidad_cajas_scanned para este día -->
+                        <?php
+                        $day_id = $row['id'];
+                        $itemsQuery = "SELECT cs.*, m.numero_parte, m.nifco_numero 
+                                       FROM calidad_cajas_scanned cs 
+                                       JOIN Modelos m ON cs.part_id = m.id 
+                                       WHERE DATE(cs.scan_timestamp) = '" . $row['day_date'] . "'";
+                        $itemsResult = mysqli_query($enlace, $itemsQuery);
+
+                        if ($itemsResult && mysqli_num_rows($itemsResult) > 0): ?>
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th class="custom-th">Número de Parte</th>
+                                        <th class="custom-th">NIFCO</th>
+                                        <th class="custom-th">Serial</th>
+                                        <th class="custom-th">Cantidad</th>
+                                        <th class="custom-th">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php while ($item = mysqli_fetch_assoc($itemsResult)): ?>
+                                        <tr class="<?php echo $item['status'] == 'Salida' ? 'status-salida' : 'status-entrada'; ?>">
+                                            <td class="custom-td"><?php echo htmlspecialchars($item['numero_parte']); ?></td>
+                                            <td class="custom-td"><?php echo htmlspecialchars($item['nifco_numero']); ?></td>
+                                            <td class="custom-td"><?php echo htmlspecialchars($item['serial_number']); ?></td>
+                                            <td class="custom-td"><?php echo htmlspecialchars($item['quantity']); ?></td>
+                                            <td class="custom-td"><?php echo htmlspecialchars($item['status']); ?></td>
+                                        </tr>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
+                        <?php else: ?>
+                            <p>No hay registros para este día.</p>
+                        <?php endif; ?>
+                    </div>
                 </div>
             <?php endwhile; ?>
         <?php else: ?>
             <p>No hay días archivados.</p>
         <?php endif; ?>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(function(header) {
+                header.addEventListener('click', function() {
+                    var body = header.nextElementSibling;
+                    if (body.style.display === 'none' || body.style.display === '') {
+                        body.style.display = 'block';
+                    } else {
+                        body.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

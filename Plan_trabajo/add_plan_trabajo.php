@@ -66,7 +66,6 @@ $messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
                                         <th class="custom-th">Piezas Plan</th>
                                         <th class="custom-th">Piezas Registradas</th>
                                         <th class="custom-th">Diferencia</th>
-                                        <th class="custom-th">Estado</th>
                                         <th class="custom-th">Acciones</th>
                                     </tr>
                                 </thead>
@@ -87,11 +86,7 @@ $messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
                                                     <span class="difference zero"><?php echo number_format($diferencia); ?></span>
                                                 <?php endif; ?>
                                             </td>
-                                            <td class="custom-td">
-                                                <span class="<?php echo $plan['status'] == 'Entrada' ? 'status-entrada' : 'status-salida'; ?>">
-                                                    <?php echo htmlspecialchars($plan['status']); ?>
-                                                </span>
-                                            </td>
+                                            
                                             <td class="custom-td">
                                                 <a href="edit_plan_trabajo.php?id=<?php echo $plan['id']; ?>" class="btn-edit">Editar</a>
                                                 <a href="?delete_id=<?php echo $plan['id']; ?>" class="btn-delete" onclick="return confirm('¿Estás seguro de que deseas eliminar este plan de trabajo?');">Eliminar</a>

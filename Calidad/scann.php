@@ -21,14 +21,15 @@ $numDays = mysqli_num_rows($dateResult);
         rel="stylesheet">
     <link rel="stylesheet" href="./css/scann.css">
     <link rel="icon" href="/img/simafa.png" type="image/sima">
+
 </head>
 
 <body>
     
 <header>
     <!-- Enlaces a la página de inicio y al historial -->
-    <a href="../index.php" class="home-icon"><i class="fas fa-home"></i></a>
-    <nav>
+    <a href="scann.php" class="home-icon"><i class="fas fa-home"></i></a>    <nav>
+        <a href="../index.php">EMBARQUES</a>
         <a href="../add_modelo.php">Agregar Numero de parte</a>
         <a href="/Plan_trabajo/add_plan_trabajo.php">Plan de trabajo</a>
         <a href="./historial_calidad/historial_calidad.php" class="history-icon"><i class="fas fa-history"></i> Historial</a>

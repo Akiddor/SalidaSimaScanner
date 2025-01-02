@@ -5,17 +5,18 @@ body {
     padding: 0; /* Eliminar relleno */
     background-color: #f4f4f4; /* Color de fondo */
     color: #333; /* Color del texto */
+    font-size: 70%; /* Reducir el tamaño de fuente en un 30% */
 }
 
 /* Contenedor principal */
 .container {
-    max-width: 700px; /* Ancho máximo del contenedor reducido */
+    max-width: 480px; /* Ancho máximo del contenedor reducido en un 30% */
     margin: 10px auto; /* Centrar el contenedor horizontalmente y reducir margen superior/inferior */
     background: #fff; /* Color de fondo del contenedor */
     border-radius: 8px; /* Bordes redondeados */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra del contenedor */
     overflow: hidden; /* Ocultar contenido desbordado */
-    padding: 15px; /* Relleno interno reducido */
+    padding: 10px; /* Relleno interno reducido en un 30% */
     position: relative; /* Posicionamiento relativo */
 }
 
@@ -25,38 +26,40 @@ body {
     justify-content: space-between; /* Espacio entre los elementos */
     align-items: center; /* Alinear elementos al centro */
     border-bottom: 2px solid #333; /* Línea inferior */
-    padding-bottom: 10px; /* Relleno inferior reducido */
-    margin-bottom: 10px; /* Margen inferior reducido */
+    padding-bottom: 6px; /* Relleno inferior reducido en un 30% */
+    margin-bottom: 6px; /* Margen inferior reducido en un 30% */
 }
 
 /* Estilo para la sección izquierda del encabezado */
 .header .left {
     text-align: center; /* Alinear texto al centro */
+    flex: 1; /* Permitir que ocupe todo el espacio disponible */
 }
 
 /* Estilo para la sección derecha del encabezado */
 .header .right {
     text-align: center; /* Alinear texto al centro */
+    flex: 0 0 auto; /* Mantener el tamaño original */
 }
 
 /* Estilo para la imagen del logo */
 .header img {
-    max-width: 50px; /* Ancho máximo de la imagen reducido */
-    margin-bottom: 5px; /* Margen inferior para separar del texto */
+    max-width: 30px; /* Ancho máximo de la imagen reducido en un 30% */
+    margin-bottom: 3px; /* Margen inferior para separar del texto */
 }
 
 /* Información de la empresa */
 .company-info {
     text-align: center; /* Alinear texto al centro */
-    margin: 5px 0; /* Margen superior e inferior reducido */
-    font-size: 12px; /* Tamaño de fuente reducido */
+    margin: 3px 0; /* Margen superior e inferior reducido en un 30% */
+    font-size: 7px; /* Tamaño de fuente reducido en un 30% */
 }
 
 /* Línea entre el logo y la información de la empresa */
 .header .separator {
     width: 100%;
     border-top: 1px solid #333; /* Línea superior */
-    margin: 5px 0; /* Margen superior e inferior reducido */
+    margin: 3px 0; /* Margen superior e inferior reducido en un 30% */
 }
 
 /* Detalles de facturación y envío */
@@ -64,9 +67,9 @@ body {
     display: flex; /* Usar flexbox para el diseño */
     justify-content: space-between; /* Espacio entre los elementos */
     border: 1px solid #ddd; /* Borde */
-    padding: 10px; /* Relleno interno reducido */
+    padding: 6px; /* Relleno interno reducido en un 30% */
     border-radius: 6px; /* Bordes redondeados */
-    margin-bottom: 10px; /* Margen inferior reducido */
+    margin-bottom: 6px; /* Margen inferior reducido en un 30% */
     background-color: #fafafa; /* Color de fondo */
 }
 
@@ -78,8 +81,8 @@ body {
 
 /* Estilo para los párrafos dentro de los detalles */
 .details p {
-    margin: 3px 0; /* Margen superior e inferior reducido */
-    font-size: 10px; /* Tamaño de fuente reducido */
+    margin: 1px 0; /* Margen superior e inferior reducido en un 30% */
+    font-size: 6px; /* Tamaño de fuente reducido en un 30% */
 }
 
 /* Estilo para el texto en negrita dentro de los detalles */
@@ -89,13 +92,13 @@ body {
 
 /* Contenedor de la tabla */
 .table-container {
-    margin-top: 10px; /* Margen superior reducido */
+    margin-top: 6px; /* Margen superior reducido en un 30% */
 }
 
 /* Estilo para los encabezados de las tablas */
 h2 {
-    font-size: 16px; /* Tamaño de fuente reducido */
-    margin-bottom: 5px; /* Margen inferior reducido */
+    font-size: 10px; /* Tamaño de fuente reducido en un 30% */
+    margin-bottom: 3px; /* Margen inferior reducido en un 30% */
     color: #444; /* Color del texto */
 }
 
@@ -103,8 +106,8 @@ h2 {
 table {
     width: 100%; /* Ancho completo */
     border-collapse: collapse; /* Colapsar bordes */
-    margin-bottom: 10px; /* Margen inferior reducido */
-    font-size: 10px; /* Tamaño de fuente reducido */
+    margin-bottom: 6px; /* Margen inferior reducido en un 30% */
+    font-size: 6px; /* Tamaño de fuente reducido en un 30% */
 }
 
 /* Estilo para los encabezados de las tablas */
@@ -123,7 +126,7 @@ td {
 /* Estilo para las celdas de las tablas */
 th,
 td {
-    padding: 5px; /* Relleno interno reducido */
+    padding: 3px; /* Relleno interno reducido en un 30% */
     text-align: center; /* Alinear texto al centro */
 }
 
@@ -140,7 +143,7 @@ tbody tr:nth-child(even) {
 /* Estilo para el botón de impresión */
 .no-print {
     text-align: center; /* Alinear texto al centro */
-    margin-top: 10px; /* Margen superior reducido */
+    margin-top: 6px; /* Margen superior reducido en un 30% */
 }
 
 /* Estilo para el botón de impresión */
@@ -148,9 +151,9 @@ tbody tr:nth-child(even) {
     background-color: #333; /* Color de fondo */
     color: #fff; /* Color del texto */
     border: none; /* Sin borde */
-    padding: 8px 15px; /* Relleno interno reducido */
+    padding: 4px 8px; /* Relleno interno reducido en un 30% */
     border-radius: 6px; /* Bordes redondeados */
-    font-size: 12px; /* Tamaño de fuente reducido */
+    font-size: 7px; /* Tamaño de fuente reducido en un 30% */
     cursor: pointer; /* Cursor de puntero */
     transition: background-color 0.3s ease; /* Transición de color de fondo */
 }
@@ -164,12 +167,12 @@ tbody tr:nth-child(even) {
 .signatures {
     display: flex; /* Usar flexbox para el diseño */
     justify-content: space-between; /* Espacio entre los elementos */
-    margin-top: 300px; /* Margen superior */
-    font-size: 13px; /* Tamaño de fuente  */
+    margin-top: 180px; /* Margen superior reducido en un 30% */
+    font-size: 7px; /* Tamaño de fuente reducido en un 30% */
 }
 
 .signature {
-    width: 25%; /* Ancho del 45% */
+    width: 25%; /* Ancho del 25% */
     text-align: center; /* Alinear texto al centro */
 }
 
@@ -178,11 +181,20 @@ tbody tr:nth-child(even) {
     margin-top: 1px; /* Margen superior */
 }
 
+/* Estilo para la sección de cantidad total */
+.total-quantity {
+    text-align: right; /* Alinear texto a la derecha */
+    margin-top: 6px; /* Margen superior reducido en un 30% */
+    font-size: 10px; /* Tamaño de fuente reducido en un 30% */
+}
+
 /* Estilos específicos para la impresión */
 @media print {
     body {
         -webkit-print-color-adjust: exact; /* Ajuste de color para impresión en WebKit */
         print-color-adjust: exact; /* Ajuste de color para impresión */
+        margin: 0; /* Eliminar márgenes */
+        padding: 0; /* Eliminar relleno */
     }
 
     .no-print {
@@ -192,10 +204,15 @@ tbody tr:nth-child(even) {
     .container {
         border: none; /* Sin borde */
         box-shadow: none; /* Sin sombra */
+        width: 100%; /* Ancho completo */
+        max-width: 100%; /* Ancho máximo completo */
+        padding: 0; /* Sin relleno */
     }
 
     .header {
         border-bottom: 2px solid #000; /* Línea inferior */
+        padding-bottom: 10px; /* Relleno inferior */
+        margin-bottom: 10px; /* Margen inferior */
     }
 
     table thead {
@@ -210,5 +227,10 @@ tbody tr:nth-child(even) {
     .details {
         border: 1px solid #000; /* Borde */
         background-color: #f0f0f0; /* Color de fondo */
+        padding: 10px; /* Relleno interno */
+    }
+
+    .signatures {
+        margin-top: 100px; /* Margen superior */
     }
 }

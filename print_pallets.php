@@ -30,6 +30,7 @@ if ($folio_result && mysqli_num_rows($folio_result) > 0) {
 
 // Inicializar la variable $pallets como un array vacío
 $pallets = [];
+$total_quantity = 0; // Inicializar la variable para la sumatoria
 
 // Obtener los detalles de los pallets seleccionados
 foreach ($pallet_ids as $pallet_id) {
@@ -37,6 +38,7 @@ foreach ($pallet_ids as $pallet_id) {
     $result = mysqli_query($enlace, $query);
     while ($row = mysqli_fetch_assoc($result)) {
         $pallets[$pallet_id][] = $row;
+        $total_quantity += $row['quantity']; // Sumar la cantidad al total
     }
 }
 ?>
@@ -49,6 +51,7 @@ foreach ($pallet_ids as $pallet_id) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Packing Slip</title>
     <link rel="stylesheet" href="css/print_pallet.css">
+    <link rel="icon" href="/img/simafa.png" type="image/sima">
 </head>
 <body>
     <div class="container">
@@ -110,6 +113,10 @@ foreach ($pallet_ids as $pallet_id) {
                     </tbody>
                 </table>
             <?php endforeach; ?>     
+        </section>
+
+        <section class="total-quantity">
+            <h2>Total Quantity: <?php echo number_format($total_quantity); ?></h2>
         </section>
 
         <div class="signatures">
