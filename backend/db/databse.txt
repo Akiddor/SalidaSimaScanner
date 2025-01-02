@@ -11,6 +11,13 @@ CREATE TABLE Days (
     status ENUM('produccion', 'archivado') DEFAULT 'produccion'
 );
 
+	CREATE TABLE calidad_days (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		day_date DATE NOT NULL UNIQUE,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		status ENUM('produccion', 'archivado') DEFAULT 'produccion'
+	);
+
 CREATE TABLE Modelos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nifco_numero VARCHAR(50) NOT NULL,
@@ -18,7 +25,7 @@ CREATE TABLE Modelos (
     UNIQUE KEY unique_model (nifco_numero, numero_parte)
 );
 
-CREATE TABLE Folios (
+CREATE TABLE Folios (	
     id INT AUTO_INCREMENT PRIMARY KEY,
     folio_number VARCHAR(50) NOT NULL UNIQUE,
     status ENUM('PENDING', 'IN_TRANSIT', 'COMPLETED') DEFAULT 'PENDING',
@@ -41,7 +48,7 @@ CREATE TABLE Pallets (
     FOREIGN KEY (folio_id) REFERENCES Folios(id) ON DELETE CASCADE
 );
 
-CREATE TABLE Cajas_scanned (
+CREATE TABLE Cajas_scanned	 (
     id INT AUTO_INCREMENT PRIMARY KEY,
     part_id INT NOT NULL,
     pallet_id INT NOT NULL,
@@ -52,6 +59,18 @@ CREATE TABLE Cajas_scanned (
     FOREIGN KEY (pallet_id) REFERENCES Pallets(id) ON DELETE CASCADE,
     UNIQUE KEY unique_serial_per_pallet (pallet_id, serial_number)
 );
+
+
+CREATE TABLE calidad_cajas_scanned (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    part_id INT NOT NULL,
+    serial_number VARCHAR(50) NOT NULL,
+    quantity INT NOT NULL,
+    scan_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('Entrada', 'Salida') DEFAULT 'Entrada',
+    FOREIGN KEY (part_id) REFERENCES Modelos(id) ON DELETE RESTRICT
+);
+
 
 CREATE TABLE IF NOT EXISTS folios_impresos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -72,7 +91,19 @@ CREATE TABLE Historial (
     FOREIGN KEY (pallet_id) REFERENCES Pallets(id) ON DELETE CASCADE,
     FOREIGN KEY (day_id) REFERENCES Days(id) ON DELETE CASCADE
 );
-use salidadbsima;
+
+CREATE TABLE historial_calidad (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    day_id INT NOT NULL,
+    part_id INT NOT NULL,
+    serial_number VARCHAR(50) NOT NULL,
+    quantity INT NOT NULL,
+    scan_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('Entrada', 'Salida') DEFAULT 'Entrada',
+    FOREIGN KEY (day_id) REFERENCES calidad_days(id) ON DELETE CASCADE,
+    FOREIGN KEY (part_id) REFERENCES Modelos(id) ON DELETE RESTRICT
+);
+
  -- Nueva actualizacion y funcionalidad
  use salidadbsima;
  CREATE TABLE PlanTrabajo (
@@ -83,11 +114,13 @@ use salidadbsima;
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
+
 -- Indexes for performance
 CREATE INDEX idx_folio_number ON Folios(folio_number);
 CREATE INDEX idx_pallet_folio ON Pallets(folio_id);
 CREATE INDEX idx_cajas_pallet ON Cajas_scanned(pallet_id);
-CREATE INDEX idx_cajas_part ON Cajas_scanned(part_id);
+CREATE INDEX idx_cajas_part ON Cajas_scanned(part_id);	
 
 INSERT INTO Modelos (nifco_numero, numero_parte) VALUES 
 ('17622', '187929LE0A'),
