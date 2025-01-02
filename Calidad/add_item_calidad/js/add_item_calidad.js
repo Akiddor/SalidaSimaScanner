@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
         serialNumberInput.value = serialNumberInput.value.replace(/[\s-]/g, '').toUpperCase();
         quantityInput.value = quantityInput.value.replace(/[\s-]/g, '').toUpperCase();
 
+        // Eliminar las letras "S" o "1S" al principio del código de barras
+        serialNumberInput.value = serialNumberInput.value.replace(/^(1S|S)/i, '');
+
         const formData = new FormData(this);
 
         fetch('back_add_item_calidad.php', {
