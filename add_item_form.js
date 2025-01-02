@@ -5,6 +5,15 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (event) {
         event.preventDefault();
 
+        // Limpiar y convertir los valores escaneados a mayúsculas
+        const serialNumberInput = document.getElementById('serial_number');
+
+        // Eliminar caracteres no deseados y convertir a mayúsculas
+        serialNumberInput.value = serialNumberInput.value.replace(/[\s-]/g, '').toUpperCase();
+
+        // Eliminar las letras "S" o "1S" al principio del código de barras
+        serialNumberInput.value = serialNumberInput.value.replace(/^(1S|S)/i, '');
+
         const formData = new FormData(form);
 
         fetch('add_item.php', {
