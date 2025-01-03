@@ -3,6 +3,7 @@
   --secondary-color: #333;
   --success-color: #4caf50;
   --error-color: #f44336;
+  --info-color: #2196f3; /* Agregar color para notificaciones de información */
   --background-color: #f4f4f4;
   --text-color: #34495e;
 }
@@ -112,4 +113,8 @@ button:hover {
 
 .notification.error {
   background-color: var(--error-color);
+}
+
+.notification.info {
+  background-color: var(--info-color); /* Estilo para notificaciones de información */
 }
