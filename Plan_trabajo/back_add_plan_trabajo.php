@@ -32,6 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    
     $exito = true;
     $mensaje = '';
+    $errores = [];
+    $nifcosInsertados = 0;
    
     // Iniciar transacción
     $enlace->begin_transaction();
@@ -42,42 +44,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nifco = $enlace->real_escape_string($nifcos[$i]);
             $cantidad = intval($piezas[$i]);
            
-            // Verificar si el NIFCO existe en la tabla Modelos
-            $checkNifcoQuery = "SELECT id FROM Modelos WHERE nifco_numero = ?";
-            $stmt = $enlace->prepare($checkNifcoQuery);
-            $stmt->bind_param("s", $nifco);
-            $stmt->execute();
-            $resultadoNifco = $stmt->get_result();
-           
-            if ($resultadoNifco->num_rows == 0) {
-                throw new Exception("El NIFCO $nifco no existe en la tabla Modelos");
-            }
-           
-            // Verificar si ya existe un plan para este NIFCO en esta fecha
-            $checkQuery = "SELECT id FROM PlanTrabajo WHERE fecha = ? AND nifco_numero = ?";
-            $stmt = $enlace->prepare($checkQuery);
-            $stmt->bind_param("ss", $fecha, $nifco);
-            $stmt->execute();
-            $resultado = $stmt->get_result();
-           
-            if ($resultado->num_rows > 0) {
-                throw new Exception("Ya existe un plan de trabajo para el NIFCO $nifco en la fecha $fecha");
-            }
-           
-            // Insertar nuevo plan de trabajo
-            $insertQuery = "INSERT INTO PlanTrabajo (fecha, nifco_numero, piezas) VALUES (?, ?, ?)";
-            $stmt = $enlace->prepare($insertQuery);
-            $stmt->bind_param("ssi", $fecha, $nifco, $cantidad);
-           
-            if (!$stmt->execute()) {
-                throw new Exception("Error al guardar el plan de trabajo para el NIFCO $nifco");
+            try {
+                // Verificar si el NIFCO existe en la tabla Modelos
+                $checkNifcoQuery = "SELECT id FROM Modelos WHERE nifco_numero = ?";
+                $stmt = $enlace->prepare($checkNifcoQuery);
+                $stmt->bind_param("s", $nifco);
+                $stmt->execute();
+                $resultadoNifco = $stmt->get_result();
+               
+                if ($resultadoNifco->num_rows == 0) {
+                    throw new Exception("El NIFCO $nifco no existe en la tabla Modelos");
+                }
+               
+                // Verificar si ya existe un plan para este NIFCO en esta fecha
+                $checkQuery = "SELECT id FROM PlanTrabajo WHERE fecha = ? AND nifco_numero = ?";
+                $stmt = $enlace->prepare($checkQuery);
+                $stmt->bind_param("ss", $fecha, $nifco);
+                $stmt->execute();
+                $resultado = $stmt->get_result();
+               
+                if ($resultado->num_rows > 0) {
+                    throw new Exception("Ya existe un plan de trabajo para el NIFCO $nifco en la fecha $fecha");
+                }
+               
+                // Insertar nuevo plan de trabajo
+                $insertQuery = "INSERT INTO PlanTrabajo (fecha, nifco_numero, piezas) VALUES (?, ?, ?)";
+                $stmt = $enlace->prepare($insertQuery);
+                $stmt->bind_param("ssi", $fecha, $nifco, $cantidad);
+               
+                if (!$stmt->execute()) {
+                    throw new Exception("Error al guardar el plan de trabajo para el NIFCO $nifco");
+                }
+                $nifcosInsertados++;
+            } catch (Exception $e) {
+                $errores[] = $e->getMessage();
             }
         }
        
         // Confirmar transacción
         $enlace->commit();
-        $mensaje = "Plan de trabajo guardado correctamente";
-        $tipoMensaje = "success";
+        if ($nifcosInsertados > 0) {
+            $mensaje = "Plan de trabajo guardado correctamente.";
+            $tipoMensaje = "success";
+        } else {
+            $mensaje = "No se pudo guardar ningún plan de trabajo";
+            $tipoMensaje = "error";
+        }
        
     } catch (Exception $e) {
         // Revertir transacción en caso de error
@@ -85,6 +97,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mensaje = $e->getMessage();
         $tipoMensaje = "error";
         $exito = false;
+    }
+   
+    // Agregar errores al mensaje si existen
+    if (!empty($errores)) {
+        if ($nifcosInsertados > 0) {
+            $mensaje .= " Algunos NIFCOs no se pudieron guardar. Errores: " . implode(", ", $errores);
+            $tipoMensaje = "warning";
+        } else {
+            $mensaje .= " Errores: " . implode(", ", $errores);
+        }
     }
    
     // Redirigir con mensaje

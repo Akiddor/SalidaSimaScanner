@@ -15,7 +15,6 @@ $messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="icon" href="/img/simafa.png" type="image/sima">
-
 </head>
 <body>
     <header>
@@ -27,7 +26,7 @@ $messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
 
         <?php if (!empty($message)): ?>
             <div class="notification <?php echo $messageType; ?> show">
-                <?php echo $message; ?>
+                <?php echo nl2br($message); ?>
             </div>
         <?php endif; ?>
 

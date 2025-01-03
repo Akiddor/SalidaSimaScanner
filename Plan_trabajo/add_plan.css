@@ -6,6 +6,10 @@
     --border-radius: 16px;
     --transition: 0.3s ease;
     --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --success-color: #4caf50;
+    --error-color: #f44336;
+    --warning-color: #ffeb3b; /* Agregar color para notificaciones de advertencia */
+    --info-color: #2196f3;
   }
   
   /* Reset y estilos base */
@@ -23,6 +27,11 @@
     padding-top: 70px;
     min-height: 100vh;
   }
+  
+.notification.warning {
+  background-color: var(--warning-color); /* Estilo para notificaciones de advertencia */
+  color: #333; /* Color de texto para mejor legibilidad */
+}
   
   /* Header */
   header {
@@ -206,38 +215,41 @@
     color: black;
   }
 
-
-  /* Clase para el estado 'Entrada' */
-.status-entrada {
-  color: red;
-  font-weight: bold;
-}
-
-/* Clase para el estado 'Salida' */
-.status-salida {
-  color: green;
-  font-weight: bold;
-}
-  
+ 
   /* Notificaciones */
   .notification {
-    padding: 1rem;
-    margin: 1rem 0;
-    border-radius: var(--border-radius);
-    text-align: center;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .notification.show {
+    opacity: 1;
   }
   
   .notification.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+    background-color: var(--success-color);
   }
   
   .notification.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    background-color: var(--error-color);
   }
+  
+  .notification.warning {
+    background-color: var(--warning-color); /* Estilo para notificaciones de advertencia */
+    color: #333; /* Color de texto para mejor legibilidad */
+  }
+  
+  .notification.info {
+    background-color: var(--info-color);
+  }
+
  /* Acordeón */
 .accordion {
   margin-top: 20px;
@@ -266,7 +278,7 @@
 }
 
 .accordion-button.active {
-  background-color: #007bff;
+  background-color: #112f50;
   color: white;
 }
 

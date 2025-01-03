@@ -55,3 +55,13 @@ document.querySelectorAll('.plan-row').forEach(row => {
         row.style.backgroundColor = '#f8d7da'; // Rojo
     }
 });
+
+// Función para ocultar la notificación después de 5 segundos
+document.addEventListener('DOMContentLoaded', function() {
+    const notification = document.querySelector('.notification.show');
+    if (notification) {
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 9000);
+    }
+});

@@ -5,18 +5,18 @@ body {
     padding: 0; /* Eliminar relleno */
     background-color: #f4f4f4; /* Color de fondo */
     color: #333; /* Color del texto */
-    font-size: 85%; /* Aumentar el tamaño de fuente en un 10% */
+    font-size: 85%; /* Tamaño de fuente */
 }
 
 /* Contenedor principal */
 .container {
-    max-width: 600px; /* Aumentar el ancho máximo del contenedor */
+    max-width: 600px; /* Ancho máximo del contenedor */
     margin: 10px auto; /* Centrar el contenedor horizontalmente y reducir margen superior/inferior */
     background: #fff; /* Color de fondo del contenedor */
     border-radius: 8px; /* Bordes redondeados */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra del contenedor */
     overflow: hidden; /* Ocultar contenido desbordado */
-    padding: 15px; /* Aumentar el relleno interno */
+    padding: 15px; /* Relleno interno */
     position: relative; /* Posicionamiento relativo */
 }
 
@@ -26,8 +26,8 @@ body {
     justify-content: space-between; /* Espacio entre los elementos */
     align-items: center; /* Alinear elementos al centro */
     border-bottom: 2px solid #333; /* Línea inferior */
-    padding-bottom: 10px; /* Aumentar el relleno inferior */
-    margin-bottom: 10px; /* Aumentar el margen inferior */
+    padding-bottom: 10px; /* Relleno inferior */
+    margin-bottom: 10px; /* Margen inferior */
 }
 
 /* Estilo para la sección izquierda del encabezado */
@@ -50,22 +50,22 @@ body {
 }
 /* Estilo para la imagen del logo */
 .header img {
-    max-width: 40px; /* Aumentar el ancho máximo de la imagen */
-    margin-bottom: 5px; /* Aumentar el margen inferior para separar del texto */
+    max-width: 40px; /* Ancho máximo de la imagen */
+    margin-bottom: 5px; /* Margen inferior para separar del texto */
 }
 
 /* Información de la empresa */
 .company-info {
     text-align: center; /* Alinear texto al centro */
-    margin: 5px 0; /* Aumentar el margen superior e inferior */
-    font-size: 10px; /* Aumentar el tamaño de fuente */
+    margin: 5px 0; /* Margen superior e inferior */
+    font-size: 10px; /* Tamaño de fuente */
 }
 
 /* Línea entre el logo y la información de la empresa */
 .header .separator {
     width: 100%;
     border-top: 1px solid #333; /* Línea superior */
-    margin: 5px 0; /* Aumentar el margen superior e inferior */
+    margin: 5px 0; /* Margen superior e inferior */
 }
 
 /* Detalles de facturación y envío */
@@ -73,9 +73,9 @@ body {
     display: flex; /* Usar flexbox para el diseño */
     justify-content: space-between; /* Espacio entre los elementos */
     border: 1px solid #ddd; /* Borde */
-    padding: 10px; /* Aumentar el relleno interno */
+    padding: 10px; /* Relleno interno */
     border-radius: 8px; /* Bordes redondeados */
-    margin-bottom: 10px; /* Aumentar el margen inferior */
+    margin-bottom: 10px; /* Margen inferior */
     background-color: #fafafa; /* Color de fondo */
 }
 
@@ -87,8 +87,8 @@ body {
 
 /* Estilo para los párrafos dentro de los detalles */
 .details p {
-    margin: 3px 0; /* Aumentar el margen superior e inferior */
-    font-size: 8px; /* Aumentar el tamaño de fuente */
+    margin: 3px 0; /* Margen superior e inferior */
+    font-size: 8px; /* Tamaño de fuente */
 }
 
 /* Estilo para el texto en negrita dentro de los detalles */
@@ -98,13 +98,13 @@ body {
 
 /* Contenedor de la tabla */
 .table-container {
-    margin-top: 10px; /* Aumentar el margen superior */
+    margin-top: 10px; /* Margen superior */
 }
 
 /* Estilo para los encabezados de las tablas */
 h2 {
-    font-size: 14px; /* Aumentar el tamaño de fuente */
-    margin-bottom: 5px; /* Aumentar el margen inferior */
+    font-size: 14px; /* Tamaño de fuente */
+    margin-bottom: 5px; /* Margen inferior */
     color: #444; /* Color del texto */
 }
 
@@ -112,8 +112,8 @@ h2 {
 table {
     width: 100%; /* Ancho completo */
     border-collapse: collapse; /* Colapsar bordes */
-    margin-bottom: 10px; /* Aumentar el margen inferior */
-    font-size: 8px; /* Aumentar el tamaño de fuente */
+    margin-bottom: 10px; /* Margen inferior */
+    font-size: 8px; /* Tamaño de fuente */
 }
 
 /* Estilo para los encabezados de las tablas */
@@ -132,7 +132,7 @@ td {
 /* Estilo para las celdas de las tablas */
 th,
 td {
-    padding: 8px; /* Aumentar el relleno interno */
+    padding: 8px; /* Relleno interno */
     text-align: center; /* Alinear texto al centro */
 }
 
@@ -149,7 +149,7 @@ tbody tr:nth-child(even) {
 /* Estilo para el botón de impresión */
 .no-print {
     text-align: center; /* Alinear texto al centro */
-    margin-top: 10px; /* Aumentar el margen superior */
+    margin-top: 10px; /* Margen superior */
 }
 
 /* Estilo para el botón de impresión */
@@ -157,9 +157,9 @@ tbody tr:nth-child(even) {
     background-color: #333; /* Color de fondo */
     color: #fff; /* Color del texto */
     border: none; /* Sin borde */
-    padding: 6px 12px; /* Aumentar el relleno interno */
+    padding: 6px 12px; /* Relleno interno */
     border-radius: 8px; /* Bordes redondeados */
-    font-size: 10px; /* Aumentar el tamaño de fuente */
+    font-size: 10px; /* Tamaño de fuente */
     cursor: pointer; /* Cursor de puntero */
     transition: background-color 0.3s ease; /* Transición de color de fondo */
 }
@@ -174,7 +174,7 @@ tbody tr:nth-child(even) {
     display: flex; /* Usar flexbox para el diseño */
     justify-content: space-between; /* Espacio entre los elementos */
     margin-top: 100px; /* Reducir el margen superior para espacio de firma */
-    font-size: 10px; /* Aumentar el tamaño de fuente */
+    font-size: 10px; /* Tamaño de fuente */
 }
 
 .signature {
@@ -184,14 +184,14 @@ tbody tr:nth-child(even) {
 
 .signature .line {
     border-top: 1px solid #333; /* Línea superior */
-    margin-top: 5px; /* Aumentar el margen superior */
+    margin-top: 5px; /* Margen superior */
 }
 
 /* Estilo para la sección de cantidad total */
 .total-quantity {
     text-align: right; /* Alinear texto a la derecha */
-    margin-top: 10px; /* Aumentar el margen superior */
-    font-size: 14px; /* Aumentar el tamaño de fuente */
+    margin-top: 10px; /* Margen superior */
+    font-size: 14px; /* Tamaño de fuente */
 }
 
 /* Estilos específicos para la impresión */
@@ -201,6 +201,7 @@ tbody tr:nth-child(even) {
         print-color-adjust: exact; /* Ajuste de color para impresión */
         margin: 0; /* Eliminar márgenes */
         padding: 0; /* Eliminar relleno */
+        font-size: 110%; /* Aumentar el tamaño de fuente en un 30% */
     }
 
     .no-print {
