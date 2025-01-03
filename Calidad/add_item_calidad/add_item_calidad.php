@@ -65,5 +65,11 @@ if ($last_serial_result && mysqli_num_rows($last_serial_result) > 0) {
         </form>
     </div>
     <script src="./js/add_item_calidad.js"></script>
+    <script>
+        // Enfocar el primer campo de entrada cuando se cargue la página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('nifco_numero').focus();
+        });
+    </script>
 </body>
 </html>
