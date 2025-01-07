@@ -106,6 +106,7 @@ CREATE TABLE historial_calidad (
 
  -- Nueva actualizacion y funcionalidad
  use salidadbsima;
+ -- -------
  CREATE TABLE PlanTrabajo (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nifco_numero VARCHAR(255) NOT NULL,
@@ -114,6 +115,10 @@ CREATE TABLE historial_calidad (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- -------------
+ALTER TABLE calidad_cajas_scanned
+ADD COLUMN day_id INT,
+ADD FOREIGN KEY (day_id) REFERENCES calidad_days(id) ON DELETE CASCADE;
 
 
 -- Indexes for performance
