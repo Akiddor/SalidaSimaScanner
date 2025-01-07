@@ -146,7 +146,7 @@ $numDays = mysqli_num_rows($dateResult);
                         </table>
                         <!-- Mostrar conteo de NIFCO y total de cantidades -->
                         <div class="nifco-summary">
-                            <h5>Resumen plan de trabajo | Calidad</h5>
+                            <h5>Resumen Plan de Trabajo | Calidad</h5>
                             <table class="custom-table">
                                 <thead>
                                     <tr>
@@ -173,7 +173,7 @@ $numDays = mysqli_num_rows($dateResult);
                         </div>
                         <!-- Mostrar conteo de NIFCO y total de cantidades para Salida -->
                         <div class="nifco-summary">
-                            <h5>Resumen Plan de trabajo | Salida</h5>
+                            <h5>Resumen Plan de Trabajo | Salida</h5>
                             <table class="custom-table">
                                 <thead>
                                     <tr>
