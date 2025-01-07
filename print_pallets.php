@@ -8,6 +8,27 @@ if (empty($pallet_ids)) {
     die('No se seleccionaron pallets para imprimir.');
 }
 
+// Obtener la fecha del folio desde la base de datos
+$folio_fecha_query = "SELECT departure_date FROM Folios WHERE folio_number = ?";
+$stmt = $enlace->prepare($folio_fecha_query);
+$stmt->bind_param("s", $folio);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $fecha_folio = $row['departure_date'];
+} else {
+    die('Folio no encontrado.');
+}
+
+// Formatear la fecha del folio
+$meses = [
+    1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril',
+    5 => 'mayo', 6 => 'junio', 7 => 'julio', 8 => 'agosto',
+    9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre'
+];
+$fecha_folio_formateada = date('j', strtotime($fecha_folio)) . '/' . $meses[intval(date('n', strtotime($fecha_folio)))] . '/' . date('Y', strtotime($fecha_folio));
+
 // Inicializar la variable $pallets como un array vacío
 $pallets = [];
 $total_quantity = 0; // Inicializar la variable para la sumatoria
@@ -30,14 +51,6 @@ foreach ($pallet_ids as $pallet_id) {
         $nifcoCounts[$nifco_numero]['quantity'] += $row['quantity'];
     }
 }
-
-// Obtener la fecha actual en el formato solicitado
-$meses = [
-    1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril',
-    5 => 'mayo', 6 => 'junio', 7 => 'julio', 8 => 'agosto',
-    9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre'
-];
-$fecha_actual = date('j') . '/' . $meses[intval(date('n'))] . '/' . date('Y');
 ?>
 
 <!DOCTYPE html>
@@ -64,7 +77,7 @@ $fecha_actual = date('j') . '/' . $meses[intval(date('n'))] . '/' . date('Y');
             </div>
             <div class="right">
                 <p><strong>Folio:</strong> <?php echo htmlspecialchars($folio); ?></p>
-                <p><strong>Fecha:</strong> <?php echo $fecha_actual; ?></p>
+                <p><strong>Fecha:</strong> <?php echo $fecha_folio_formateada; ?></p>
             </div>
         </header>
 

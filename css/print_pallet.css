@@ -48,6 +48,7 @@ body {
     font-size: 12px; /* Tamaño de fuente */
     line-height: 1.5; /* Altura de línea */
 }
+
 /* Estilo para la imagen del logo */
 .header img {
     max-width: 40px; /* Ancho máximo de la imagen */
@@ -108,12 +109,17 @@ h2 {
     color: #444; /* Color del texto */
 }
 
+/* Estilo para los encabezados h5 */
+h5 {
+    margin: 5px 0; /* Reducir margen superior e inferior */
+}
+
 /* Estilo para las tablas */
 table {
     width: 100%; /* Ancho completo */
     border-collapse: collapse; /* Colapsar bordes */
     margin-bottom: 10px; /* Margen inferior */
-    font-size: 8px; /* Tamaño de fuente */
+    font-size: 12px; /* Tamaño de fuente aumentado */
 }
 
 /* Estilo para los encabezados de las tablas */
@@ -132,7 +138,7 @@ td {
 /* Estilo para las celdas de las tablas */
 th,
 td {
-    padding: 8px; /* Relleno interno */
+    padding: 4px; /* Relleno interno reducido */
     text-align: center; /* Alinear texto al centro */
 }
 

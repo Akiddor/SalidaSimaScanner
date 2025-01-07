@@ -95,6 +95,9 @@ $numDays = mysqli_num_rows($dateResult);
                                 $nifcoCounts = [];
                                 $totalQuantity = 0;
                                 $totalCajas = 0;
+                                $nifcoSalidaCounts = [];
+                                $totalSalidaQuantity = 0;
+                                $totalSalidaCajas = 0;
 
                                 if ($itemsResult && mysqli_num_rows($itemsResult) > 0):
                                     while ($item = mysqli_fetch_assoc($itemsResult)):
@@ -108,6 +111,16 @@ $numDays = mysqli_num_rows($dateResult);
                                         $nifcoCounts[$nifco]['quantity'] += $quantity;
                                         $totalQuantity += $quantity;
                                         $totalCajas++;
+
+                                        if ($item['status'] == 'Salida') {
+                                            if (!isset($nifcoSalidaCounts[$nifco])) {
+                                                $nifcoSalidaCounts[$nifco] = ['count' => 0, 'quantity' => 0];
+                                            }
+                                            $nifcoSalidaCounts[$nifco]['count']++;
+                                            $nifcoSalidaCounts[$nifco]['quantity'] += $quantity;
+                                            $totalSalidaQuantity += $quantity;
+                                            $totalSalidaCajas++;
+                                        }
                                         ?>
                                         <tr data-item-id="<?php echo $item['id']; ?>" class="<?php echo $item['status'] == 'Salida' ? 'status-salida' : ''; ?>">
                                             <td class="custom-td"><?php echo htmlspecialchars($item['numero_parte']); ?></td>
@@ -133,18 +146,57 @@ $numDays = mysqli_num_rows($dateResult);
                         </table>
                         <!-- Mostrar conteo de NIFCO y total de cantidades -->
                         <div class="nifco-summary">
-                            <h5>Resumen de NIFCO</h5>
-                            <ul>
-                                <?php foreach ($nifcoCounts as $nifco => $count): ?>
-                                    <li>
-                                        <span class="nifco-number"><?php echo htmlspecialchars($nifco); ?></span>: 
-                                        <?php echo number_format($count['quantity']); ?> 
-                                        (<?php echo $count['count']; ?> Cajas)
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                            <p>Total de cantidades: <?php echo number_format($totalQuantity); ?></p>
-                            <p>Total de cajas: <?php echo number_format($totalCajas); ?></p>
+                            <h5>Resumen plan de trabajo | Calidad</h5>
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th class="custom-th">NIFCO</th>
+                                        <th class="custom-th">Cantidad</th>
+                                        <th class="custom-th">Cajas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($nifcoCounts as $nifco => $count): ?>
+                                        <tr>
+                                            <td class="custom-td"><?php echo htmlspecialchars($nifco); ?></td>
+                                            <td class="custom-td"><?php echo number_format($count['quantity']); ?></td>
+                                            <td class="custom-td"><?php echo $count['count']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    <tr>
+                                        <td class="custom-td"><strong>Total</strong></td>
+                                        <td class="custom-td"><strong><?php echo number_format($totalQuantity); ?></strong></td>
+                                        <td class="custom-td"><strong><?php echo $totalCajas; ?></strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Mostrar conteo de NIFCO y total de cantidades para Salida -->
+                        <div class="nifco-summary">
+                            <h5>Resumen Plan de trabajo | Salida</h5>
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th class="custom-th">NIFCO</th>
+                                        <th class="custom-th">Cantidad</th>
+                                        <th class="custom-th">Cajas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($nifcoSalidaCounts as $nifco => $count): ?>
+                                        <tr>
+                                            <td class="custom-td"><?php echo htmlspecialchars($nifco); ?></td>
+                                            <td class="custom-td"><?php echo number_format($count['quantity']); ?></td>
+                                            <td class="custom-td"><?php echo $count['count']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    <tr>
+                                        <td class="custom-td"><strong>Total</strong></td>
+                                        <td class="custom-td"><strong><?php echo number_format($totalSalidaQuantity); ?></strong></td>
+                                        <td class="custom-td"><strong><?php echo $totalSalidaCajas; ?></strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

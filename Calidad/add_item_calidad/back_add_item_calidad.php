@@ -67,10 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $part_id = $row['id'];
                 $nifco_numero = $row['nifco_numero'];
 
-                // Verificar duplicados
-                $checkQuery = "SELECT id FROM calidad_cajas_scanned 
-                             WHERE serial_number = '$serial_number' 
-                             AND DATE(scan_timestamp) = '$selectedDate'";
+                // Verificar duplicados en toda la tabla
+                $checkQuery = "SELECT id FROM calidad_cajas_scanned WHERE serial_number = '$serial_number'";
                 $checkResult = mysqli_query($enlace, $checkQuery);
 
                 if (!$checkResult) {
@@ -92,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $response['message'] = "Ítem agregado exitosamente";
                     $response['nifco_numero'] = $nifco_numero;
                 } else {
-                    throw new Exception("El número de serie ya existe para este día");
+                    throw new Exception("El número de serie ya existe");
                 }
             } else {
                 throw new Exception("Número de parte no encontrado");
@@ -112,3 +110,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ob_clean();
 header('Content-Type: application/json');
 echo json_encode($response);
+?>
