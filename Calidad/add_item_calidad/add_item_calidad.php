@@ -13,7 +13,7 @@ if ($day_result && mysqli_num_rows($day_result) > 0) {
 }
 
 // Obtener el último número de serie registrado
-$last_serial_query = "SELECT serial_number FROM calidad_cajas_scanned WHERE DATE(scan_timestamp) = '$day_fecha' ORDER BY scan_timestamp DESC LIMIT 1";
+$last_serial_query = "SELECT serial_number FROM calidad_cajas_scanned WHERE day_id = $day_id ORDER BY scan_timestamp DESC LIMIT 1";
 $last_serial_result = mysqli_query($enlace, $last_serial_query);
 $last_serial = '';
 if ($last_serial_result && mysqli_num_rows($last_serial_result) > 0) {

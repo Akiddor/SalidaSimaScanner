@@ -114,9 +114,53 @@ $fecha_actual = date('j') . '/' . $meses[intval(date('n'))] . '/' . date('Y');
             <?php endforeach; ?>     
         </section>
 
-        <!-- Mostrar conteo de NIFCO y total de cantidades -->
+        <!-- Resumen de NIFCO para cada pallet -->
+        <section class="nifco-summary">
+            <?php $pallet_counter = 1; ?>
+            <?php foreach ($pallets as $pallet_id => $items): ?>
+                <h5>Resumen de Pallet <?php echo $pallet_counter++; ?></h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>NIFCO</th>
+                            <th>Quantity</th>
+                            <th>Boxes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $palletNifcoCounts = [];
+                        $totalBoxes = 0;
+                        foreach ($items as $pallet) {
+                            $nifco_numero = $pallet['nifco_numero'];
+                            if (!isset($palletNifcoCounts[$nifco_numero])) {
+                                $palletNifcoCounts[$nifco_numero] = ['count' => 0, 'quantity' => 0];
+                            }
+                            $palletNifcoCounts[$nifco_numero]['count']++;
+                            $palletNifcoCounts[$nifco_numero]['quantity'] += $pallet['quantity'];
+                            $totalBoxes++;
+                        }
+                        ?>
+                        <?php foreach ($palletNifcoCounts as $nifco => $count): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($nifco); ?></td>
+                                <td><?php echo number_format($count['quantity']); ?></td>
+                                <td><?php echo $count['count']; ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td><strong><?php echo number_format(array_sum(array_column($palletNifcoCounts, 'quantity'))); ?></strong></td>
+                            <td><strong><?php echo $totalBoxes; ?></strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            <?php endforeach; ?>     
+        </section>
+
+        <!-- Resumen total de NIFCO y total de cantidades -->
         <div class="nifco-summary">
-            <h5>Resumen de Packing</h5>
+            <h5>Resumen Total de Packing</h5>
             <table>
                 <thead>
                     <tr>
@@ -126,13 +170,20 @@ $fecha_actual = date('j') . '/' . $meses[intval(date('n'))] . '/' . date('Y');
                     </tr>
                 </thead>
                 <tbody>
+                    <?php $totalBoxes = 0; ?>
                     <?php foreach ($nifcoCounts as $nifco => $count): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($nifco); ?></td>
                             <td><?php echo number_format($count['quantity']); ?></td>
                             <td><?php echo $count['count']; ?></td>
                         </tr>
+                        <?php $totalBoxes += $count['count']; ?>
                     <?php endforeach; ?>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td><strong><?php echo number_format(array_sum(array_column($nifcoCounts, 'quantity'))); ?></strong></td>
+                        <td><strong><?php echo $totalBoxes; ?></strong></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

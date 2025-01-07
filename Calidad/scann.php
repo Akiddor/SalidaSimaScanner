@@ -28,7 +28,8 @@ $numDays = mysqli_num_rows($dateResult);
     
 <header>
     <!-- Enlaces a la página de inicio y al historial -->
-    <a href="scann.php" class="home-icon"><i class="fas fa-home"></i></a>    <nav>
+    <a href="scann.php" class="home-icon"><i class="fas fa-home"></i></a>    
+    <nav>
         <a href="../index.php">EMBARQUES</a>
         <a href="../add_modelo.php">Agregar Numero de parte</a>
         <a href="/Plan_trabajo/add_plan_trabajo.php">Plan de trabajo</a>
@@ -93,6 +94,7 @@ $numDays = mysqli_num_rows($dateResult);
 
                                 $nifcoCounts = [];
                                 $totalQuantity = 0;
+                                $totalCajas = 0;
 
                                 if ($itemsResult && mysqli_num_rows($itemsResult) > 0):
                                     while ($item = mysqli_fetch_assoc($itemsResult)):
@@ -105,6 +107,7 @@ $numDays = mysqli_num_rows($dateResult);
                                         $nifcoCounts[$nifco]['count']++;
                                         $nifcoCounts[$nifco]['quantity'] += $quantity;
                                         $totalQuantity += $quantity;
+                                        $totalCajas++;
                                         ?>
                                         <tr data-item-id="<?php echo $item['id']; ?>" class="<?php echo $item['status'] == 'Salida' ? 'status-salida' : ''; ?>">
                                             <td class="custom-td"><?php echo htmlspecialchars($item['numero_parte']); ?></td>
@@ -136,11 +139,12 @@ $numDays = mysqli_num_rows($dateResult);
                                     <li>
                                         <span class="nifco-number"><?php echo htmlspecialchars($nifco); ?></span>: 
                                         <?php echo number_format($count['quantity']); ?> 
-                                        (<?php echo $count['count']; ?> veces)
+                                        (<?php echo $count['count']; ?> Cajas)
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
                             <p>Total de cantidades: <?php echo number_format($totalQuantity); ?></p>
+                            <p>Total de cajas: <?php echo number_format($totalCajas); ?></p>
                         </div>
                     </div>
                 </div>
