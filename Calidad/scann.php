@@ -83,7 +83,6 @@ $numDays = mysqli_num_rows($dateResult);
                                     <th class="custom-th">NIFCO</th>
                                     <th class="custom-th">Serial</th>
                                     <th class="custom-th">Cantidad</th>
-                                    <th class="custom-th">Fecha de Escaneo</th>
                                     <th class="custom-th">Acciones</th>
                                 </tr>
                             </thead>
@@ -112,7 +111,6 @@ $numDays = mysqli_num_rows($dateResult);
                                             <td class="custom-td"><?php echo htmlspecialchars($item['nifco_numero']); ?></td>
                                             <td class="custom-td"><?php echo htmlspecialchars($item['serial_number']); ?></td>
                                             <td class="custom-td"><?php echo htmlspecialchars($item['quantity']); ?></td>
-                                            <td class="custom-td"><?php echo htmlspecialchars($item['scan_timestamp']); ?></td>
                                             <td class="custom-td">
                                                 <button class="btn-edit-item" data-item-id="<?php echo $item['id']; ?>">Editar</button>
                                                 <button class="btn-delete-item" data-item-id="<?php echo $item['id']; ?>">Eliminar</button>

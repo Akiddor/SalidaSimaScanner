@@ -1,59 +1,114 @@
 <?php
+// Activar reporte de errores para depuración
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+// Verificar la conexión a la base de datos
 require '../../backend/db/db.php';
 
-$response = ['success' => false, 'message' => '', 'debug' => ''];
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $day_id = $_POST['day_id'];
-    $numero_parte = $_POST['nifco_numero'];
-    $serial_number = $_POST['serial_number'];
-    $quantity = $_POST['quantity'];
-    $status = 'Entrada'; // Establecer el estado automáticamente a "Entrada"
-
-    // Verificar si el número de parte existe en la tabla Modelos
-    $checkQuery = "SELECT id, nifco_numero FROM Modelos WHERE numero_parte = '$numero_parte'";
-    $checkResult = mysqli_query($enlace, $checkQuery);
-
-    if (mysqli_num_rows($checkResult) > 0) {
-        $row = mysqli_fetch_assoc($checkResult);
-        $part_id = $row['id'];
-        $nifco_numero = $row['nifco_numero'];
-
-        // Verificar si el número de serie ya existe
-        $serialCheckQuery = "SELECT id FROM calidad_cajas_scanned WHERE serial_number = '$serial_number'";
-        $serialCheckResult = mysqli_query($enlace, $serialCheckQuery);
-
-        if (mysqli_num_rows($serialCheckResult) == 0) {
-            // Insertar el nuevo ítem en la base de datos
-            $insertQuery = "INSERT INTO calidad_cajas_scanned (part_id, serial_number, quantity, scan_timestamp, status) 
-                            VALUES ('$part_id', '$serial_number', '$quantity', NOW(), '$status')";
-            if (mysqli_query($enlace, $insertQuery)) {
-                // Insertar en el historial
-                $insertHistorialQuery = "INSERT INTO historial_calidad (day_id, part_id, serial_number, quantity, scan_timestamp, status) 
-                                         VALUES ('$day_id', '$part_id', '$serial_number', '$quantity', NOW(), '$status')";
-                mysqli_query($enlace, $insertHistorialQuery);
-
-                $response['success'] = true;
-                $response['message'] = "Ítem agregado exitosamente.";
-                $response['nifco_numero'] = $nifco_numero;
-                $response['debug'] = "Query executed successfully: $insertQuery";
-            } else {
-                $response['message'] = "Error al agregar el ítem: " . mysqli_error($enlace);
-                $response['debug'] = "Query failed: $insertQuery";
-            }
-        } else {
-            $response['message'] = "El número de serie ya existe.";
-            $response['debug'] = "Serial number already exists: $serial_number";
-        }
-    } else {
-        $response['message'] = "El número de parte no existe en la base de datos.";
-        $response['debug'] = "Part number not found: $numero_parte";
-    }
-} else {
-    $response['message'] = "Método de solicitud no válido.";
-    $response['debug'] = "Invalid request method: " . $_SERVER['REQUEST_METHOD'];
+if (!$enlace) {
+    die("Error de conexión: " . mysqli_connect_error());
 }
 
+// Debug: Ver qué datos están llegando
+echo "Datos POST recibidos:\n";
+var_dump($_POST);
+
+$response = [
+    'success' => false,
+    'message' => '',
+    'debug' => ''
+];
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    try {
+        // Debug: Imprimir los valores que estamos recibiendo
+        echo "\nValores recibidos:\n";
+        echo "day_id: " . $_POST['day_id'] . "\n";
+        echo "nifco_numero: " . $_POST['nifco_numero'] . "\n";
+        echo "serial_number: " . $_POST['serial_number'] . "\n";
+        echo "quantity: " . $_POST['quantity'] . "\n";
+
+        // Validar y sanitizar las entradas
+        $day_id = filter_var($_POST['day_id'], FILTER_VALIDATE_INT);
+        $numero_parte = mysqli_real_escape_string($enlace, $_POST['nifco_numero']);
+        $serial_number = mysqli_real_escape_string($enlace, $_POST['serial_number']);
+        $quantity = filter_var($_POST['quantity'], FILTER_VALIDATE_INT);
+        $status = 'Entrada';
+
+        // Debug: Imprimir los valores después de la sanitización
+        echo "\nValores sanitizados:\n";
+        echo "day_id: $day_id\n";
+        echo "numero_parte: $numero_parte\n";
+        echo "serial_number: $serial_number\n";
+        echo "quantity: $quantity\n";
+
+        // Obtener la fecha del día seleccionado
+        $dayQuery = "SELECT day_date FROM calidad_days WHERE id = '$day_id' AND status = 'produccion'";
+        $dayResult = mysqli_query($enlace, $dayQuery);
+
+        if (!$dayResult) {
+            throw new Exception("Error en la consulta: " . mysqli_error($enlace));
+        }
+
+        if ($dayRow = mysqli_fetch_assoc($dayResult)) {
+            $selectedDate = $dayRow['day_date'];
+            echo "\nFecha seleccionada: $selectedDate\n";
+
+            // Obtener el ID del número de parte
+            $partQuery = "SELECT id, nifco_numero FROM Modelos WHERE numero_parte = '$numero_parte'";
+            $partResult = mysqli_query($enlace, $partQuery);
+
+            if (!$partResult) {
+                throw new Exception("Error al buscar número de parte: " . mysqli_error($enlace));
+            }
+
+            if ($row = mysqli_fetch_assoc($partResult)) {
+                $part_id = $row['id'];
+                $nifco_numero = $row['nifco_numero'];
+
+                // Verificar duplicados
+                $checkQuery = "SELECT id FROM calidad_cajas_scanned 
+                             WHERE serial_number = '$serial_number' 
+                             AND DATE(scan_timestamp) = '$selectedDate'";
+                $checkResult = mysqli_query($enlace, $checkQuery);
+
+                if (!$checkResult) {
+                    throw new Exception("Error al verificar duplicados: " . mysqli_error($enlace));
+                }
+
+                if (mysqli_num_rows($checkResult) == 0) {
+                    // Insertar el nuevo registro
+                    $insertQuery = "INSERT INTO calidad_cajas_scanned 
+                                  (part_id, serial_number, quantity, scan_timestamp, status, day_id)
+                                  VALUES 
+                                  ($part_id, '$serial_number', $quantity, '$selectedDate', '$status', $day_id)";
+
+                    if (!mysqli_query($enlace, $insertQuery)) {
+                        throw new Exception("Error al insertar: " . mysqli_error($enlace));
+                    }
+
+                    $response['success'] = true;
+                    $response['message'] = "Ítem agregado exitosamente";
+                    $response['nifco_numero'] = $nifco_numero;
+                } else {
+                    throw new Exception("El número de serie ya existe para este día");
+                }
+            } else {
+                throw new Exception("Número de parte no encontrado");
+            }
+        } else {
+            throw new Exception("Día no encontrado o no está en producción");
+        }
+    } catch (Exception $e) {
+        $response['message'] = $e->getMessage();
+        echo "\nError: " . $e->getMessage() . "\n";
+    }
+} else {
+    $response['message'] = "Método no válido";
+}
+
+// Asegurar que no haya más output antes del JSON
+ob_clean();
 header('Content-Type: application/json');
 echo json_encode($response);
-?>  

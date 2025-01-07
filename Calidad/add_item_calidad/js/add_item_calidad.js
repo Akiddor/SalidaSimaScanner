@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('addItemForm');
+    if (!form) return; // Si no existe el formulario, salimos
+    
     form.addEventListener('submit', function (event) {
         event.preventDefault();
 
@@ -22,53 +24,30 @@ document.addEventListener('DOMContentLoaded', function () {
             method: 'POST',
             body: formData
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showNotification(`${data.message} Número de NIFCO: ${data.nifco_numero}`, 'success');
-
-                    // Limpiar el formulario
-                    this.reset();
-
-                    // Establecer el foco en el primer campo de entrada
-                    document.getElementById('nifco_numero').focus();
-                } else {
-                    showNotification(data.message, 'error');
-                }
-                console.log(data.debug); // Mostrar mensajes de depuración en la consola
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('Error al agregar el ítem.', 'error');
-            });
-    });
-
-    const createDayForm = document.getElementById('createDayForm');
-    createDayForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        const formData = new FormData(this);
-
-        fetch('back_add_item_calidad.php', {
-            method: 'POST',
-            body: formData
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showNotification(data.message, 'success');
-
-                    // Limpiar el formulario
-                    this.reset();
-                } else {
-                    showNotification(data.message, 'error');
-                }
-                console.log(data.debug); // Mostrar mensajes de depuración en la consola
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('Error al crear el día.', 'error');
-            });
+        .then(data => {
+            if (data.success) {
+                showNotification(`${data.message} Número de NIFCO: ${data.nifco_numero}`, 'success');
+                
+                // Limpiar el formulario
+                this.reset();
+                
+                // Establecer el foco en el primer campo de entrada
+                document.getElementById('nifco_numero').focus();
+            } else {
+                showNotification(data.message, 'error');
+            }
+            console.log(data.debug); // Mostrar mensajes de depuración en la consola
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Error al agregar el ítem.', 'error');
+        });
     });
 });
 

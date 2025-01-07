@@ -34,7 +34,7 @@ if ($last_serial_result && mysqli_num_rows($last_serial_result) > 0) {
 <body>
     <div class="container">
         <h2>Agregar Ítem | CALIDAD</h2>
-        <h2>Estas en el Dia: <?php echo htmlspecialchars($day_fecha); ?></h2>
+        <h2>Estas en el Día: <?php echo htmlspecialchars($day_fecha); ?></h2>
 
         <!-- Mostrar mensaje de éxito o error si está presente -->
         <?php if (isset($_GET['message']) && isset($_GET['messageType'])): ?>
