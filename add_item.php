@@ -1,5 +1,5 @@
 <?php
-// Configuración inicial
+session_start();
 ob_start();
 header('Content-Type: application/json');
 ini_set('display_errors', 1);
@@ -31,6 +31,14 @@ try {
             $row = mysqli_fetch_assoc($check_serial_result);
             $quantity = $row['quantity'];
             $part_id = $row['part_id'];
+
+            // Verificar si el número de parte es válido
+            $check_part_query = "SELECT * FROM Modelos WHERE id = '$part_id'";
+            $check_part_result = mysqli_query($enlace, $check_part_query);
+
+            if (!$check_part_result || mysqli_num_rows($check_part_result) == 0) {
+                throw new Exception("Número de parte no válido. Reinicie para continuar.");
+            }
 
             // Actualizar el estado del registro en calidad_cajas_scanned a 'Salida'
             $update_status_query = "UPDATE calidad_cajas_scanned SET status = 'Salida' WHERE serial_number = '$serial_number'";
