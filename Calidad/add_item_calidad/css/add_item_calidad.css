@@ -1,120 +1,191 @@
-:root {
-  --primary-color: #5fd326;
-  --secondary-color: #333;
-  --success-color: #4caf50;
-  --error-color: #f44336;
-  --info-color: #2196f3; /* Agregar color para notificaciones de información */
-  --background-color: #f4f4f4;
-  --text-color: #34495e;
-}
-
-body {
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.6;
-  color: var(--text-color);
-  background-color: var(--background-color);
+/* General Reset */
+* {
   margin: 0;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+/* Body General */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f6f8fa; /* Fondo claro */
+  color: #333; /* Texto principal */
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor General */
 .container {
-  background-color: #ffffff;
+  max-width: 600px;
+  margin: 3rem auto;
+  background-color: #fff;
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-}
-
-h2 {
-  color: var(--secondary-color);
+  border-radius: 10px; /* Bordes suaves */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Sombra para efecto de elevación */
   text-align: center;
-  margin-bottom: 1.5rem;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-label {
-  margin-bottom: 0.5rem;
-  color: var(--secondary-color);
-  font-weight: bold;
-}
-
-input[type="text"],
-input[type="number"],
-select {
-  padding: 0.75rem;
+/* Títulos del formulario */
+.container h2 {
+  font-size: 1.5rem;
   margin-bottom: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
+  color: #007bff; /* Azul fuerte para títulos */
 }
 
-button {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 0.75rem;
+
+/* Formularios */
+form {
+  margin-top: 2rem;
+}
+
+form label {
+  display: block;
+  font-weight: 600;
+  margin: 10px 0 5px;
+  color: #333;
+  text-align: left;
+}
+
+/* Input genérico */
+form input[type="text"],
+form input[type="number"] {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #ffffff; /* Fondo blanco */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efecto de foco en los inputs */
+form input[type="text"]:focus,
+form input[type="number"]:focus {
+  outline: none;
+  border-color: #007bff; /* Azul cuando está enfocado */
+  box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.2); /* Sombra tenue */
+  background-color: #f9f9fd; /* Fondo muy ligeramente azul */
+}
+
+/* Placeholder estilizado */
+form input::placeholder {
+  color: #aaa;
+  font-style: italic; /* Fuente cursiva para el texto placeholder */
+  font-size: 0.9rem;
+}
+
+/* Estilo específico para el input de Cantidad */
+#quantity {
+  border: 2px solid #ffcc00; /* Borde amarillo para destacar */
+  font-weight: 600;
+}
+
+#quantity:focus {
+  border-color: #ffa500; /* Naranja cuando está enfocado */
+  background-color: #fffbea; /* Fondo crema claro */
+  box-shadow: 0px 4px 8px rgba(255, 165, 0, 0.2); /* Sombra naranja tenue */
+}
+/* Botón de Registrar */
+button[type="submit"] {
+  padding: 10px 15px;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
   font-size: 1rem;
-  transition: background-color 0.3s ease;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px; /* Añadir margen superior */
+  margin-bottom: 30px;
 }
 
-button:hover {
-  background-color: #e68900;
+button[type="submit"]:hover {
+  background-color: #0056b3;
 }
 
+/* Mensajes */
 .message {
-  margin-top: 1rem;
-  text-align: center;
-  font-weight: bold;
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  display: none; /* Ocultos inicialmente */
 }
 
-@media (max-width: 480px) {
+.message.success {
+  background-color: #28a745;
+}
+
+.message.error {
+  background-color: #dc3545;
+}
+
+/* Responsividad */
+@media screen and (max-width: 480px) {
   .container {
-      padding: 1rem;
+      width: 90%;
+      padding: 20px;
   }
 
-  input[type="text"],
-  input[type="number"],
-  select,
-  button {
+  input[type="text"], button[type="submit"] {
       font-size: 0.9rem;
   }
 }
 
+/* Notificaciones */
 .notification {
   position: fixed;
-  top: 20px;
+  bottom: 20px;
   right: 20px;
-  padding: 10px 20px;
-  border-radius: 5px;
-  color: #fff;
-  z-index: 1000;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-}
-
-.notification.show {
+  background-color: #fff;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: #333;
+  font-size: 1rem;
   opacity: 1;
+  z-index: 1000;
+  transform: translateX(0);
+  animation: fadein 0.5s ease;
 }
 
 .notification.success {
-  background-color: var(--success-color);
+  background-color: #28a745;
+  color: #fff;
 }
 
 .notification.error {
-  background-color: var(--error-color);
+  background-color: #dc3545;
+  color: #fff;
 }
 
-.notification.info {
-  background-color: var(--info-color); /* Estilo para notificaciones de información */
+.notification.show {
+  display: block;
+}
+
+@keyframes fadein {
+  from {
+      opacity: 0;
+      transform: translateX(100%);
+  }
+  to {
+      opacity: 1;
+      transform: translateX(0);
+  }
+}
+
+/* Alert Error Flashing */
+.alert-error-flashing {
+  animation: flash-red 1s infinite;
+}
+
+@keyframes flash-red {
+  0%, 100% {
+      background-color: red; /* Fondo rojo */
+  }
+  50% {
+      background-color: #fff; /* Fondo blanco */
+  }
 }
