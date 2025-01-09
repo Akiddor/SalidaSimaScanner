@@ -294,3 +294,99 @@ p {
   animation: slideDown 0.3s ease-out;
 }
 
+
+/* Contenedor de la tabla */
+.table-container {
+  margin: 20px auto;
+  width: 100%;
+  max-width: 800px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tabla */
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  margin-bottom: 15px;
+}
+
+.custom-table thead tr {
+  background-color: #007bff;
+  color: white;
+  text-align: left;
+}
+
+.custom-table th, .custom-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #f1f1f1;
+  transition: background-color 0.3s ease;
+}
+
+.custom-table .no-data {
+  text-align: center;
+  font-style: italic;
+  color: #999;
+}
+
+/* Botón de eliminar */
+.btn-delete-item {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-delete-item:hover {
+  background-color: #c82333;
+}
+
+/* Resumen de NIFCO */
+.nifco-summary h5 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.nifco-summary ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nifco-summary li {
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: #555;
+}
+
+.nifco-summary .nifco-number {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.nifco-summary .nifco-details {
+  margin-left: 5px;
+  color: #333;
+}
+
+.nifco-summary .nifco-totals {
+  margin-top: 15px;
+}
+
+.nifco-summary .nifco-totals p {
+  font-size: 16px;
+  color: #000;
+  margin: 5px 0;
+}

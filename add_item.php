@@ -1,12 +1,17 @@
 <?php
+
 session_start();
+
 ob_start();
+
 header('Content-Type: application/json');
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require 'backend/db/db.php';
+
 $response = ['success' => false, 'message' => ''];
 
 try {
@@ -15,29 +20,39 @@ try {
         $pallet_id = mysqli_real_escape_string($enlace, $_POST['pallet_id']);
         $folio_id = mysqli_real_escape_string($enlace, $_POST['folio_id']);
 
-        // Limpiar el valor del número de serie
+        // Limpiar y normalizar el número de serie
         $serial_number = preg_replace('/^1S/', '', $serial_number);
         $serial_number = preg_replace('/[\s-]/', '', $serial_number);
 
-        // Verificar si el número de serie existe en calidad_cajas_scanned y tiene estado 'Entrada'
-        $check_serial_query = "SELECT * FROM calidad_cajas_scanned WHERE serial_number = '$serial_number' AND status = 'Entrada'";
+        // Verificar si el número de serie existe en `calidad_cajas_scanned`
+        $check_serial_query = "SELECT * FROM calidad_cajas_scanned WHERE serial_number = '$serial_number'";
         $check_serial_result = mysqli_query($enlace, $check_serial_query);
 
         if (!$check_serial_result) {
             throw new Exception("Error en la consulta SQL: " . mysqli_error($enlace));
         }
 
-        if (mysqli_num_rows($check_serial_result) > 0) {
-            $row = mysqli_fetch_assoc($check_serial_result);
-            $quantity = $row['quantity'];
-            $part_id = $row['part_id'];
+        if (mysqli_num_rows($check_serial_result) == 0) {
+            // Número de serie no existe en calidad_cajas_scanned
+            throw new Exception("El número de serie '$serial_number' no está registrado en calidad.");
+        }
 
-            // Verificar si el número de parte es válido
+        // Si existe, verificar el estado
+        $row = mysqli_fetch_assoc($check_serial_result);
+        $status = $row['status']; // Estado actual del serial
+        $quantity = $row['quantity']; // Cantidad asociada
+        $part_id = $row['part_id']; // ID del modelo asociado
+
+        if ($status === 'Salida') {
+            // Si el número de serie ya está en salida, mostrar un mensaje
+            throw new Exception("El número de serie '$serial_number' ya está registrado como 'Salida' y no se puede registrar de nuevo.");
+        } elseif ($status === 'Entrada') {
+            // Verificar si el número de parte existe y es válido
             $check_part_query = "SELECT * FROM Modelos WHERE id = '$part_id'";
             $check_part_result = mysqli_query($enlace, $check_part_query);
 
             if (!$check_part_result || mysqli_num_rows($check_part_result) == 0) {
-                throw new Exception("Número de parte no válido. Reinicie para continuar.");
+                throw new Exception("El número de parte asociado no es válido. Reinicie para continuar.");
             }
 
             // Actualizar el estado del registro en calidad_cajas_scanned a 'Salida'
@@ -49,13 +64,14 @@ try {
             // Insertar el registro en la tabla Cajas_scanned
             $insert_query = "INSERT INTO Cajas_scanned (serial_number, pallet_id, part_id, quantity) VALUES ('$serial_number', '$pallet_id', '$part_id', '$quantity')";
             if (!mysqli_query($enlace, $insert_query)) {
-                throw new Exception("Error al agregar el registro: " . mysqli_error($enlace));
+                throw new Exception("Error al agregar el registro en Cajas_scanned: " . mysqli_error($enlace));
             }
 
+            // Respuesta de éxito
             $response['success'] = true;
-            $response['message'] = "Registro agregado exitosamente.";
+            $response['message'] = "El número de serie '$serial_number' se registró correctamente.";
         } else {
-            throw new Exception("El número de serie no existe en la tabla de calidad o ya ha sido marcado como 'Salida'.");
+            throw new Exception("Estado no reconocido para el número de serie '$serial_number'.");
         }
     } else {
         throw new Exception("Método de solicitud no válido.");
@@ -68,4 +84,5 @@ try {
     echo json_encode($response);
     exit;
 }
+
 ?>

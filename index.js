@@ -11,8 +11,31 @@ document.addEventListener('DOMContentLoaded', function() {
             const url = `add_item_form.php?pallet_id=${palletId}&folio_id=${folioId}`;
             window.open(url, 'Agregar Item', 'width=600,height=400');
         });
+        
     });
 
+// Asociar eventos a los botones de eliminar item
+document.querySelectorAll('.btn-delete-item').forEach(button => {
+    button.addEventListener('click', function () {
+        const itemId = this.getAttribute('data-item-id');
+        if (confirm('¿Estás seguro de que deseas eliminar este registro?')) {
+            fetch(`delete_item.php?id=${itemId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector(`tr[data-item-id="${itemId}"]`).remove();
+                        alert(data.message);
+                    } else {
+                        alert(data.message || 'Error al eliminar el registro.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al eliminar el registro.');
+                });
+        }
+    });
+});
 
     function handleNotification() {
         const notification = document.getElementById('notification');
