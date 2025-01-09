@@ -39,11 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 // Establecer el foco en el primer campo de entrada
                 document.getElementById('nifco_numero').focus();
-
-                // Recargar la página para actualizar el último número de serie
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000); // Esperar un segundo antes de recargar
             } else {
                 showNotification(data.message, 'error');
             }
