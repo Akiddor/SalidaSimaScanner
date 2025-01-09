@@ -135,9 +135,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Redirigir con mensaje
-    header("Location: index.php?message=" . urlencode($message) . "&messageType=" . urlencode($messageType));
-    exit;
+ // Redirigir con mensaje
+header("Location: index.php?message=" . urlencode($message) . "&messageType=" . urlencode($messageType));
+exit;
 }
 
 // Obtener fechas únicas de la tabla Days

@@ -1,14 +1,4 @@
-/* General Styling */
-body {
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.5;
-  margin: 0;
-  padding: 0;
-  background-color: #e0e0e0;
-  color: #444;
-}
-
-/* Header Styling */
+/* Mantener estilos originales del header */
 header {
   display: flex;
   justify-content: space-between;
@@ -30,362 +20,277 @@ header a:hover {
   color: #ff9800;
 }
 
-header .home-icon {
-  margin-right: auto;
+/* Nuevo diseño para el resto */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  color: #333;
 }
 
-header .history-icon {
-  margin-left: auto;
+main {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 20px;
 }
 
-nav {
+h1 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+/* Estilos para los acordeones */
+.accordion {
+  margin: 20px 0;
+}
+
+.accordion-item {
+  background: #fff;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.accordion-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.accordion-header {
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  cursor: pointer;
   display: flex;
-  gap: 1em;
-}
-
-/* Form Styling */
-.center-form {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  margin: 2em 0;
-  padding: 2em;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  justify-content: space-between;
+  border-bottom: 2px solid #f0f0f0;
 }
 
-.center-form label {
-  font-size: 1.1em;
-  margin-bottom: 0.5em;
+.accordion-header h3, 
+.accordion-header h4 {
+  margin: 0;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.accordion-body {
+  padding: 20px;
+  background: #f8f9fa;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* Botones */
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-delete-folio,
+.btn-delete-pallet {
+  background-color: #dc3545;
+  color: white;
+  margin-left: 10px;
+}
+
+.btn-delete-folio:hover,
+.btn-delete-pallet:hover {
+  background-color: #c82333;
+}
+
+.btn-imprimir-folio {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-imprimir-folio:hover {
+  background-color: #218838;
+}
+
+.btn-archive-day {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-archive-day:hover {
+  background-color: #5a6268;
+}
+
+/* Formularios */
+.center-form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
 }
 
 .center-form input[type="date"] {
-  padding: 0.6em;
-  font-size: 1em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 1em;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px 0;
+  width: 200px;
 }
 
 .center-form button {
-  background-color: #ff9800;
+  background-color: #007bff;
   color: white;
-  padding: 0.8em 1.5em;
   border: none;
-  border-radius: 4px;
+  padding: 10px 20px;
+  border-radius: 5px;
   cursor: pointer;
-  font-family: 'Roboto', sans-serif;
   transition: background-color 0.3s ease;
 }
 
 .center-form button:hover {
-  background-color: #e68900;
+  background-color: #0056b3;
 }
 
-.center-form button span {
-  font-size: 1.1em;
+/* Estilos para los pallets */
+.pallet-container {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* Heading Styling */
-h1,
-h2,
-h3,
-h4 {
-  font-family: 'Roboto', sans-serif;
-  color: #333;
-  margin-bottom: 0.5em;
-}
-
-h1 {
-  font-size: 2.2em;
-  text-align: center;
-  margin-bottom: 1.2em;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-  font-size: 1.8em;
-  font-weight: 500;
-  margin-bottom: 1em;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 0.3em;
-  text-align: center;
-}
-
-h3 {
-  font-size: 1.5em;
-  font-weight: 400;
-  margin-bottom: 0.8em;
-}
-
-h4 {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-bottom: 0.5em;
-}
-
-/* Link Styling */
-a {
-  color: #ff9800;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* Button Styling */
-button {
-  background-color: #ff9800;
-  color: white;
-  padding: 0.8em 1.5em;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: 'Roboto', sans-serif;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #e68900;
-}
-
-button i {
-  margin-right: 0.5em;
-}
-
-/* Accordion Styling */
-.custom-accordion {
-  width: 90%;
-  margin: 20px auto;
-}
-
-.custom-accordion-item {
-  background-color: #fff;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.custom-accordion-header {
-  padding: 1em;
-  cursor: pointer;
-  border-bottom: 1px solid #ddd;
-  background-color: #f5f5f5;
-  margin-top: 5px;
-}
-
-.custom-accordion-header.active {
-  background-color: #e0e0e0;
-}
-
-.custom-accordion-body {
-  padding: 1em;
-  display: none;
-}
-
-.custom-accordion-body.show {
-  display: block;
-}
-
-/* Specific Accordion Styling */
-.accordion-day .custom-accordion-header {
-  background-color: #e1f5fe;
-  border: 1px solid #81d4fa;
-}
-
-.accordion-folio .custom-accordion-header {
-  background-color: #fff8e1;
-  border: 1px solid #ffe082;
-}
-
-.accordion-pallet .custom-accordion-header {
-  background-color: #e8f5e9;
-  border: 1px solid #a5d6a7;
-}
-
-/* Pallet Styling */
-.custom-pallet {
-  border: 1px solid #ccc;
-  padding: 1em;
-  margin-bottom: 1em;
-  background-color: #fff;
-}
-
-.pallet-actions {
-  margin-top: 0.5em;
-}
-
-.btn-select-pallet.selected {
-  background-color: #4caf50;
-}
-
-.btn-select-pallet.selected:hover {
-  background-color: #388e3c;
-}
-
-/* Table Styling */
-.custom-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1em;
-}
-
-.custom-th,
-.custom-td {
-  border: 1px solid #ccc;
-  padding: 0.4em 0.8em; /* Reducir el padding vertical */
-  text-align: left;
-}
-
-.custom-th {
-  background-color: #f5f5f5;
-  font-weight: bold;
-}
-
-.custom-td {
-  background-color: #fff;
-}
-
-.custom-tr:nth-child(even) .custom-td {
-  background-color: #f9f9f9;
-}
-/* Print Button Styling */
-#print-selected-container {
-  text-align: center;
-  margin-top: 1em;
-}
-
-.btn-print-selected {
-  background-color: #4caf50;
-}
-
-.btn-print-selected:hover {
-  background-color: #388e3c;
-}
-
-/* No Items Message Styling */
-.no-pallets-message,
-.no-dates-message {
-  text-align: center;
-  padding: 1em;
-  border: 1px dashed #bbb;
-  margin: 1em 0;
-}
-
-/* Responsiveness */
-@media (max-width: 768px) {
-  .custom-accordion {
-    width: 95%;
-  }
-
-  h1 {
-    font-size: 1.8em;
-  }
-
-  h2 {
-    font-size: 1.6em;
-  }
-
-  h3 {
-    font-size: 1.2em;
-  }
-
-  h4 {
-    font-size: 1em;
-  }
-}
-
-/* Alert Styles */
-.notification {
+/* Notificaciones */
+#notification-container {
   position: fixed;
   top: 20px;
   right: 20px;
   z-index: 1000;
-  padding: 1em;
-  margin: 0;
-  border-radius: 4px;
-  font-family: 'Roboto', sans-serif;
-  font-size: 1em;
-  text-align: center;
-  display: none;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
 }
 
-.notification.show {
-  display: block;
-  opacity: 1;
+.notification {
+  background: #fff;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 300px;
+  opacity: 0;
+  transform: translateX(100%);
+  animation: slideIn 0.5s ease forwards;
 }
 
 .notification.success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  border-left: 4px solid #28a745;
 }
 
 .notification.error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  border-left: 4px solid #dc3545;
 }
 
-.notification.info {
-  background-color: #d1ecf1;
-  color: #0c5460;
-  border: 1px solid #bee5eb;
+.notification-close {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0 5px;
+  margin-left: 10px;
+  transition: all 0.3s ease;
 }
 
-.notification.warning {
-  background-color: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffeeba;
-}
-
-/* NIFCO Summary Styling */
-.nifco-summary {
-  margin-top: 1em;
-  padding: 0.5em;
-  background-color: #fff3e0;
-  border: 1px solid #ffcc80;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.nifco-summary h5 {
-  margin: 0 0 0.5em;
-  font-size: 1.2em;
-  color: #ff9800;
-  text-align: center;
-}
-
-.nifco-summary ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0 0 0.5em;
-}
-
-.nifco-summary ul li {
-  font-size: 1em;
+.notification-close:hover {
+  transform: rotate(90deg);
   color: #333;
-  padding: 0.3em 0;
-  border-bottom: 1px solid #ffcc80;
 }
 
-.nifco-summary ul li:last-child {
-  border-bottom: none;
+/* Animaciones */
+@keyframes slideIn {
+  0% {
+      transform: translateX(100%);
+      opacity: 0;
+  }
+  50% {
+      transform: translateX(-10%);
+      opacity: 0.5;
+  }
+  100% {
+      transform: translateX(0);
+      opacity: 1;
+  }
 }
 
-.nifco-summary ul li span.nifco-number {
-  font-weight: bold;
-  color: #ff9800;
+.notification.fade-out {
+  animation: slideOut 0.5s ease forwards;
 }
 
-.nifco-summary p {
-  font-size: 1.1em;
-  font-weight: bold;
-  color: #333;
+@keyframes slideOut {
+  0% {
+      transform: translateX(0);
+      opacity: 1;
+  }
+  100% {
+      transform: translateX(100%);
+      opacity: 0;
+  }
+}
+
+/* Animación de rebote para nuevas notificaciones */
+.notification.new {
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0% {
+      transform: scale(0.3);
+      opacity: 0;
+  }
+  50% {
+      transform: scale(1.05);
+      opacity: 0.8;
+  }
+  70% {
+      transform: scale(0.9);
+      opacity: 0.9;
+  }
+  100% {
+      transform: scale(1);
+      opacity: 1;
+  }
+}
+
+/* Contador de días */
+p {
+  color: #6c757d;
+  font-size: 1.1rem;
   text-align: center;
-  margin: 0;
+  margin: 20px 0;
 }
+
+/* Animaciones */
+@keyframes slideDown {
+  from {
+      opacity: 0;
+      transform: translateY(-10px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+.accordion-body {
+  animation: slideDown 0.3s ease-out;
+}
+
