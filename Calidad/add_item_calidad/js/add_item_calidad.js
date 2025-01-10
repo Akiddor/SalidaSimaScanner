@@ -13,7 +13,28 @@ document.addEventListener("DOMContentLoaded", function () {
         // Expresión corregida
         nifcoNumeroInput.value = nifcoNumeroInput.value.replace(/[\s'P\-.]/g, '').toUpperCase();
         serialNumberInput.value = serialNumberInput.value.replace(/[\s'P\-.]/g, '').toUpperCase();
-        quantityInput.value = quantityInput.value.replace(/[\s\-.]/g, '').toUpperCase();
+        quantityInput.value = quantityInput.value.replace(/[\s\-.EQ]/gi, '').toUpperCase();
+
+        // Eliminar las letras "S" o "1S" al principio del código de barras
+        serialNumberInput.value = serialNumberInput.value.replace(/^(1S|S)/i, '');
+
+        // Validar que el número de serie no comience con "Q"
+        if (/^Q/i.test(serialNumberInput.value)) {
+            showNotification("El número de serie no puede comenzar con 'Q'.", "error");
+            return;
+        }
+
+        // Validar que el número de serie no contenga "Q50"
+        if (/Q50/i.test(serialNumberInput.value)) {
+            showNotification("El número de serie no puede contener 'Q50'.", "error");
+            return;
+        }
+
+        // Validar que la cantidad no contenga las letras "E" y "Q"
+        if (/E|Q/i.test(quantityInput.value)) {
+            showNotification("La cantidad no puede contener las letras 'E' o 'Q'.", "error");
+            return;
+        }
 
         const formData = new FormData(form);
 
