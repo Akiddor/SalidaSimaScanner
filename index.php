@@ -68,7 +68,8 @@ $numDays = mysqli_num_rows($dateResult);
 
     <link rel="stylesheet" href="/css/index.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-
+    <link rel="icon" href="/img/simafa.png" type="image/sima">
+    
 
 </head>
 

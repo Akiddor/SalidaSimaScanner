@@ -4,24 +4,30 @@ require '../backend/db/db.php';
 
 // Función para obtener los planes de trabajo por fecha
 function obtenerPlanesPorFecha($conexion) {
-    $query = "SELECT pt.*, 
-                     COALESCE(SUM(cs.quantity), 0) as piezas_registradas
+    $query = "SELECT 
+                pt.*,
+                COALESCE(
+                    (SELECT SUM(cs.quantity) 
+                     FROM calidad_cajas_scanned cs 
+                     JOIN Modelos m ON m.id = cs.part_id 
+                     WHERE m.nifco_numero = pt.nifco_numero 
+                     AND DATE(cs.scan_timestamp) = pt.fecha
+                    ), 0
+                ) as piezas_registradas
               FROM PlanTrabajo pt
-              LEFT JOIN Modelos m ON pt.nifco_numero = m.nifco_numero
-              LEFT JOIN calidad_cajas_scanned cs ON m.id = cs.part_id AND DATE(cs.scan_timestamp) = pt.fecha
-              GROUP BY pt.id, pt.fecha, pt.nifco_numero
               ORDER BY pt.fecha DESC, pt.nifco_numero";
-   
+
     $resultado = $conexion->query($query);
-   
+    
     $planesPorFecha = array();
     while ($row = $resultado->fetch_assoc()) {
         $fecha = date('Y-m-d', strtotime($row['fecha']));
         $planesPorFecha[$fecha][] = $row;
     }
-   
+    
     return $planesPorFecha;
 }
+
 
 // Procesar el formulario cuando se envía
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

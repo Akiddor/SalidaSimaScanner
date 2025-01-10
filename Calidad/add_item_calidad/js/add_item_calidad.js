@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const quantityInput = document.getElementById('quantity');
 
         // Eliminar caracteres no deseados y convertir a mayúsculas
-        nifcoNumeroInput.value = nifcoNumeroInput.value.replace(/[\s'P-]/g, '').toUpperCase();
-        serialNumberInput.value = serialNumberInput.value.replace(/[\s'P-]/g, '').toUpperCase();
-        quantityInput.value = quantityInput.value.replace(/[\s-]/g, '').toUpperCase();
+        nifcoNumeroInput.value = nifcoNumeroInput.value.replace(/[\s'P-.]/g, '').toUpperCase();
+        serialNumberInput.value = serialNumberInput.value.replace(/[\s'P-.]/g, '').toUpperCase();
+        quantityInput.value = quantityInput.value.replace(/[\s-.]/g, '').toUpperCase();
 
         // Eliminar las letras "S" o "1S" al principio del código de barras
         serialNumberInput.value = serialNumberInput.value.replace(/^(1S|S)/i, '');

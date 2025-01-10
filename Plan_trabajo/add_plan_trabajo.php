@@ -66,6 +66,7 @@ $messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
                                         <th class="custom-th">Piezas Plan</th>
                                         <th class="custom-th">Piezas Registradas</th>
                                         <th class="custom-th">Diferencia</th>
+                                        <th class="custom-th">Adherencia (%)</th>
                                         <th class="custom-th">Acciones</th>
                                     </tr>
                                 </thead>
@@ -87,6 +88,12 @@ $messageType = isset($_GET['messageType']) ? $_GET['messageType'] : '';
                                                 <?php else: ?>
                                                     <span class="difference zero"><?php echo number_format($diferencia); ?></span>
                                                 <?php endif; ?>
+                                            </td>
+                                            <td class="custom-td">
+                                                <?php 
+                                                $adherencia = ($plan['piezas'] > 0) ? ($plan['piezas_registradas'] / $plan['piezas']) * 100 : 0;
+                                                echo number_format($adherencia, 2) . '%';
+                                                ?>
                                             </td>
                                             <td class="custom-td">
                                                 <a href="edit_plan_trabajo.php?id=<?php echo $plan['id']; ?>" class="btn-edit">Editar</a>
